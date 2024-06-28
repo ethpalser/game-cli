@@ -19,9 +19,9 @@ public interface Selectable {
     /**
      * Perform an action once this Selectable has been chosen.
      *
-     * @return SelectionContext containing the result of its onSelect and next Selectable
-     * @see SelectableResult
+     * @return Result containing whether the onSelect had an error and message that should be displayed
+     * @see Result
      */
-    SelectableResult onSelect();
+    Result onSelect(String[] args);
 
 }
