@@ -13,6 +13,13 @@ package com.github.ethpalser.menu.event;
 public interface Displayable {
 
     /**
+     * Determines if this displayable object should be rendered.
+     *
+     * @return boolean (true/false)
+     */
+    boolean isVisible();
+
+    /**
      * Perform an action before this is displayed.
      *
      * @return Result of the action
