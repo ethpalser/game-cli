@@ -9,7 +9,7 @@ import com.github.ethpalser.Result;
  * <br><br>
  * The intended use for Selectable is to allow interactions with the Selectable object. Additionally, an action
  * may be performed when the object is being treated as selected. A selected object should not be mistaken as an
- * submitted object.
+ * executed object.
  *
  */
 public interface Selectable {
@@ -25,9 +25,9 @@ public interface Selectable {
     /**
      * Perform an action once this Selectable has been chosen.
      *
-     * @return Result containing whether the onSelect had an error and message that should be displayed
+     * @return Result of the action when selected
      * @see Result
      */
-    Result onSelect(String[] args);
+    Result onSelect();
 
 }
