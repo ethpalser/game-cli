@@ -10,7 +10,7 @@ package com.github.ethpalser.menu.event;
  * to modify its content. It is not recommended to use onRender() to modify its content, as it can be unclear whether
  * onRender() occurs before, during or after the renderer displays the content.
  */
-public interface Displayable {
+public interface Displayable<T> {
 
     /**
      * Determines if this displayable object should be rendered.
@@ -18,6 +18,20 @@ public interface Displayable {
      * @return boolean (true/false)
      */
     boolean isVisible();
+
+    /**
+     * Fetches the display that will be rendered.
+     *
+     * @return Object that will be consumed by a renderer.
+     */
+    T getDisplay();
+
+    /**
+     * Updates the display to be rendered.
+     *
+     * @param display Object with type consumed by a renderer.
+     */
+    void setDisplay(T display);
 
     /**
      * Perform an action before this is displayed.
@@ -39,6 +53,5 @@ public interface Displayable {
      * @return Result of the action
      */
     Result postRender();
-
 
 }
