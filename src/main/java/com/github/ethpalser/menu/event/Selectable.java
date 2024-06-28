@@ -1,7 +1,5 @@
 package com.github.ethpalser.menu.event;
 
-import com.github.ethpalser.Result;
-
 /**
  * Selectable describes an object that can be chosen, such as from a group of one or more options.
  * <br><br>
