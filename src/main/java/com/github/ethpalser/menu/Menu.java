@@ -14,7 +14,7 @@ public abstract class Menu {
     private final String name;
     private final Map<String, Menu> children;
 
-    Menu(final String name, final Menu[] children) {
+    protected Menu(final String name, final Menu[] children) {
         this.name = name;
         this.children = new TreeMap<>();
         this.addChildren(children);
@@ -25,7 +25,7 @@ public abstract class Menu {
      *
      * @return String representing its name
      */
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
@@ -38,14 +38,14 @@ public abstract class Menu {
      * @see Event
      * @see Result
      */
-    abstract Result handleEvent(Event event, String[] args);
+    public abstract Result handleEvent(Event event, String[] args);
 
     /**
      * Returns this Menu's children.
      *
      * @return Map of Menu name to Menu
      */
-    Map<String, Menu> getChildren() {
+    public Map<String, Menu> getChildren() {
         return this.children;
     }
 
@@ -54,7 +54,7 @@ public abstract class Menu {
      *
      * @param children array of Menu objects
      */
-    void addChildren(Menu... children) {
+    public void addChildren(Menu... children) {
         for (Menu child : children) {
             this.children.put(child.getName(), child);
         }
@@ -65,7 +65,7 @@ public abstract class Menu {
      *
      * @param child Menu object
      */
-    void addChild(Menu child) {
+    public void addChild(Menu child) {
         addChildren(child);
     }
 
@@ -74,7 +74,7 @@ public abstract class Menu {
      *
      * @param names String array representing a list of Menu names
      */
-    void removeChildren(String... names) {
+    public void removeChildren(String... names) {
         for (String name : names) {
             this.children.remove(name);
         }
@@ -85,7 +85,7 @@ public abstract class Menu {
      *
      * @param name String representing a Menu's name
      */
-    void removeChild(String name) {
+    public void removeChild(String name) {
         removeChildren(name);
     }
 
