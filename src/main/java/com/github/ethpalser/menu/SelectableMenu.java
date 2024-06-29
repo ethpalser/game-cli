@@ -43,7 +43,7 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
             return new Result();
         }
         return switch (event) {
-            case DISPLAY -> this.onRender();
+            case RENDER -> this.onRender();
             case SELECT -> this.onSelect();
             default -> new Result();
         };

@@ -1,7 +1,9 @@
 package com.github.ethpalser.menu.event;
 
 public enum Event {
-    DISPLAY,
     EXECUTE,
+    PRE_RENDER,
+    RENDER,
+    POST_RENDER,
     SELECT,
 }

@@ -28,7 +28,7 @@ public class SimpleMenu<T> extends Menu implements Displayable<T> {
 
     @Override
     public Result handleEvent(Event event, String[] args) {
-        if (Event.DISPLAY == event) {
+        if (Event.RENDER == event) {
             return onRender();
         }
         return new Result();
