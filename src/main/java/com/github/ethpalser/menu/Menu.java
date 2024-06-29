@@ -38,7 +38,7 @@ public abstract class Menu {
      * @see Event
      * @see Result
      */
-    abstract Result handleEvent(Event event);
+    abstract Result handleEvent(Event event, String[] args);
 
     /**
      * Returns this Menu's children.

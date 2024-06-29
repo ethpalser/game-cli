@@ -38,7 +38,7 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
     }
 
     @Override
-    public Result handleEvent(Event event) {
+    public Result handleEvent(Event event, String[] args) {
         if (event == null) {
             return new Result();
         }

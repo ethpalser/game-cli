@@ -29,14 +29,14 @@ public class InteractiveMenu<T> extends SelectableMenu<T> implements Executable 
     }
 
     @Override
-    public Result handleEvent(Event event) {
+    public Result handleEvent(Event event, String[] args) {
         if (event == null) {
             return new Result();
         }
         return switch (event) {
             case DISPLAY -> this.onRender();
             case SELECT -> this.onSelect();
-            case EXECUTE -> this.onExecute(null);
+            case EXECUTE -> this.onExecute(args);
         };
     }
 }
