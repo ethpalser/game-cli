@@ -1,23 +1,23 @@
 package com.github.ethpalser.ui;
 
-import com.github.ethpalser.menu.AbstractMenu;
+import com.github.ethpalser.menu.Menu;
 import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.EventType;
 import java.util.Set;
 
 public class CommandMenu implements Runnable {
 
-    private final AbstractMenu main;
-    private AbstractMenu active;
+    private final Menu main;
+    private Menu active;
     private boolean activeUpdated;
 
-    public CommandMenu(AbstractMenu main) {
+    public CommandMenu(Menu main) {
         this.main = main;
         this.active = main;
         this.activeUpdated = false;
     }
 
-    private void setActiveMenu(final AbstractMenu menu) {
+    private void setActiveMenu(final Menu menu) {
         this.active = menu;
         this.activeUpdated = true;
     }
@@ -46,7 +46,7 @@ public class CommandMenu implements Runnable {
                     close = true;
                     break;
                 }
-                AbstractMenu selected = this.active.getChildren().get("");
+                Menu selected = this.active.getChildren().get("");
                 if (this.active.getName().equals(selected.getName())) {
                     this.active.receiveEvent(new Event(EventType.SELECT));
                     this.active = selected;

@@ -14,15 +14,15 @@ import java.util.Optional;
  * Menu objects are containers of data that can contain sub-menus (children). These objects can handle events
  * that it supports.
  */
-public abstract class AbstractMenu {
+public class Menu {
 
     private final String name;
-    private final Map<String, AbstractMenu> children;
+    private final Map<String, Menu> children;
     private final Map<EventType, EventListener> eventListeners;
 
     private String textDisplay; // alternate to display for screen readers, or primary display as string
 
-    protected AbstractMenu(final String name, final AbstractMenu[] children, final String altDisplayString) {
+    protected Menu(final String name, final Menu[] children, final String altDisplayString) {
         this.name = name;
         this.children = new LinkedHashMap<>();
         this.textDisplay = altDisplayString;
@@ -30,7 +30,7 @@ public abstract class AbstractMenu {
         this.addChildren(children);
     }
 
-    protected AbstractMenu(final String name, final AbstractMenu[] children) {
+    protected Menu(final String name, final Menu[] children) {
         this.name = name;
         this.children = new LinkedHashMap<>();
         this.eventListeners = new HashMap<>();
@@ -80,7 +80,7 @@ public abstract class AbstractMenu {
      *
      * @return Map of Menu name to Menu
      */
-    public Map<String, AbstractMenu> getChildren() {
+    public Map<String, Menu> getChildren() {
         return this.children;
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractMenu {
      * @param name String representing name of a Menu
      * @return Menu
      */
-    public AbstractMenu getChild(String name) {
+    public Menu getChild(String name) {
         return this.children.get(name);
     }
 
@@ -103,11 +103,11 @@ public abstract class AbstractMenu {
      * @param index integer representing the location in the Menu-storing data structure.
      * @return Menu
      */
-    public AbstractMenu getChild(int index) {
+    public Menu getChild(int index) {
         if (this.children.size() <= index) {
             return null;
         }
-        return (AbstractMenu) this.children.values().toArray()[index];
+        return (Menu) this.children.values().toArray()[index];
     }
 
     /**
@@ -115,8 +115,8 @@ public abstract class AbstractMenu {
      *
      * @param children array of Menu objects
      */
-    public void addChildren(AbstractMenu... children) {
-        for (AbstractMenu child : children) {
+    public void addChildren(Menu... children) {
+        for (Menu child : children) {
             this.children.put(child.getName(), child);
         }
     }
@@ -126,7 +126,7 @@ public abstract class AbstractMenu {
      *
      * @param child Menu object
      */
-    public void addChild(AbstractMenu child) {
+    public void addChild(Menu child) {
         addChildren(child);
     }
 
@@ -198,17 +198,6 @@ public abstract class AbstractMenu {
     public boolean isDisabled() {
         return Optional.ofNullable(this.getEventListeners()).orElse(List.of()).isEmpty();
     }
-
-    /**
-     * Handles an event sent to this object. The result contains data that may be useful for the event emitter.
-     * It is recommended to return an empty Result instead of null for events that are not handled.
-     *
-     * @param eventType Event that is to be handled
-     * @return Result of the event
-     * @see EventType
-     * @see Result
-     */
-    public abstract Result handleEvent(EventType eventType, String[] args);
 
     /**
      * Accepts an event and defers handling to an event listener for that event. All Exceptions are caught and

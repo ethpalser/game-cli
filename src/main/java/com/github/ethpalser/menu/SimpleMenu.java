@@ -1,15 +1,13 @@
 package com.github.ethpalser.menu;
 
 import com.github.ethpalser.menu.event.Displayable;
-import com.github.ethpalser.menu.event.EventType;
-import com.github.ethpalser.menu.event.Result;
 
-public class SimpleMenu<T> extends AbstractMenu implements Displayable<T> {
+public class SimpleMenu<T> extends Menu implements Displayable<T> {
 
     private boolean isVisible;
     private T display;
 
-    public SimpleMenu(String name, boolean isVisible, T display, AbstractMenu... children) {
+    public SimpleMenu(String name, boolean isVisible, T display, Menu... children) {
         super(name, children);
         this.isVisible = isVisible;
         this.display = display;
@@ -17,26 +15,13 @@ public class SimpleMenu<T> extends AbstractMenu implements Displayable<T> {
     }
 
     public SimpleMenu(String name, boolean isVisible, T display) {
-        this(name, isVisible, display, new AbstractMenu[]{});
+        this(name, isVisible, display, new Menu[]{});
     }
 
-    public SimpleMenu(final String name, final AbstractMenu[] children) {
+    public SimpleMenu(final String name, final Menu[] children) {
         super(name, children);
         this.isVisible = false;
         this.display = null;
-    }
-
-    @Override
-    public Result handleEvent(EventType eventType, String[] args) {
-        if (eventType == null) {
-            return new Result();
-        }
-        return switch (eventType) {
-            case PRE_RENDER -> preRender();
-            case RENDER -> onRender();
-            case POST_RENDER -> postRender();
-            default -> new Result();
-        };
     }
 
     @Override

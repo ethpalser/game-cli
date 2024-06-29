@@ -1,6 +1,5 @@
 package com.github.ethpalser.menu;
 
-import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Result;
 import com.github.ethpalser.menu.event.Selectable;
 
@@ -8,13 +7,13 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
 
     private boolean isAvailable;
 
-    public SelectableMenu(String name, boolean isVisible, T display, boolean isAvailable, AbstractMenu... children) {
+    public SelectableMenu(String name, boolean isVisible, T display, boolean isAvailable, Menu... children) {
         super(name, isVisible, display, children);
         this.isAvailable = isAvailable;
     }
 
     public SelectableMenu(String name, boolean isVisible, T display, boolean isAvailable) {
-        this(name, isVisible, display, isAvailable, (AbstractMenu[]) null);
+        this(name, isVisible, display, isAvailable, (Menu[]) null);
         this.isAvailable = true;
     }
 
@@ -22,7 +21,7 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
         this(name, isVisible, display, true);
     }
 
-    public SelectableMenu(final String name, final AbstractMenu[] children) {
+    public SelectableMenu(final String name, final Menu[] children) {
         super(name, children);
         this.isAvailable = false;
     }
@@ -37,17 +36,4 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
         return new Result();
     }
 
-    @Override
-    public Result handleEvent(EventType eventType, String[] args) {
-        if (eventType == null) {
-            return new Result();
-        }
-        return switch (eventType) {
-            case PRE_RENDER -> this.preRender();
-            case RENDER -> this.onRender();
-            case POST_RENDER -> this.postRender();
-            case SELECT -> this.onSelect();
-            default -> new Result();
-        };
-    }
 }
