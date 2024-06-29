@@ -28,10 +28,15 @@ public class SimpleMenu<T> extends Menu implements Displayable<T> {
 
     @Override
     public Result handleEvent(Event event, String[] args) {
-        if (Event.RENDER == event) {
-            return onRender();
+        if (event == null) {
+            return new Result();
         }
-        return new Result();
+        return switch (event) {
+            case PRE_RENDER -> preRender();
+            case RENDER -> onRender();
+            case POST_RENDER -> postRender();
+            default -> new Result();
+        };
     }
 
     @Override

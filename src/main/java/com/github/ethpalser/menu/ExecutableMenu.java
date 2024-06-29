@@ -34,7 +34,9 @@ public class ExecutableMenu<T> extends SelectableMenu<T> implements Executable {
             return new Result();
         }
         return switch (event) {
+            case PRE_RENDER -> this.preRender();
             case RENDER -> this.onRender();
+            case POST_RENDER -> this.postRender();
             case SELECT -> this.onSelect();
             case EXECUTE -> this.onExecute(args);
         };
