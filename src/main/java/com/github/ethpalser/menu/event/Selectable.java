@@ -26,6 +26,8 @@ public interface Selectable {
      * @return Result of the action when selected
      * @see Result
      */
-    Result onSelect();
+    default Result onSelect() {
+        return new Result();
+    }
 
 }
