@@ -1,9 +1,13 @@
 package com.github.ethpalser.menu;
 
+import com.github.ethpalser.menu.event.EventListener;
 import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Result;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Menu objects are containers of data that can contain sub-menus (children). These objects can handle events
@@ -13,10 +17,22 @@ public abstract class AbstractMenu {
 
     private final String name;
     private final Map<String, AbstractMenu> children;
+    private final Map<EventType, EventListener> eventListeners;
+
+    private String textDisplay; // alternate to display for screen readers, or primary display as string
+
+    protected AbstractMenu(final String name, final AbstractMenu[] children, final String altDisplayString) {
+        this.name = name;
+        this.children = new LinkedHashMap<>();
+        this.textDisplay = altDisplayString;
+        this.eventListeners = new HashMap<>();
+        this.addChildren(children);
+    }
 
     protected AbstractMenu(final String name, final AbstractMenu[] children) {
         this.name = name;
         this.children = new LinkedHashMap<>();
+        this.eventListeners = new HashMap<>();
         this.addChildren(children);
     }
 
@@ -29,6 +45,34 @@ public abstract class AbstractMenu {
         return this.name;
     }
 
+    /**
+     * Returns a representation of its graphical display as a string. For string-only contexts, this would be the
+     * primary display. By default, nothing is ensuring an accurate representation is used, and this may simply be
+     * used to describe a graphic for screen readers.
+     *
+     * @return String
+     */
+    public String getTextDisplay() {
+        return this.textDisplay;
+    }
+
+    /**
+     * Sets the alternate, string display of this Menu.
+     *
+     * @param stringDisplay Representation of its graphical display as a string.
+     */
+    public void setTextDisplay(String stringDisplay) {
+        this.textDisplay = stringDisplay;
+    }
+
+    /**
+     * Determines if this displayable object should be prevented from being rendered.
+     *
+     * @return boolean (true/false)
+     */
+    public boolean isHidden() {
+        return false;
+    }
 
     /**
      * Returns this Menu's children.
@@ -103,6 +147,55 @@ public abstract class AbstractMenu {
      */
     public void removeChild(String name) {
         removeChildren(name);
+    }
+
+    /**
+     * Returns all event listeners of this Menu as a list
+     *
+     * @return List of EventListener
+     * @see EventListener
+     */
+    public List<EventListener> getEventListeners() {
+        return this.eventListeners.values().stream().toList();
+    }
+
+    /**
+     * Returns a single EventListener tied to a specific EventType. If there is no EventListener, an empty
+     * Optional object will be returned.
+     *
+     * @param eventType EventType the EventListener is on.
+     * @return Optional of EventListener
+     */
+    public Optional<EventListener> getEventListener(EventType eventType) {
+        return Optional.ofNullable(this.eventListeners.get(eventType));
+    }
+
+    /**
+     * Connect an EventListener to an EventType. If there is already a listener on that EventType, it will be replaced.
+     *
+     * @param eventType     EventType
+     * @param eventListener EventListener
+     */
+    public void addEventListener(EventType eventType, EventListener eventListener) {
+        this.eventListeners.put(eventType, eventListener);
+    }
+
+    /**
+     * Removes an EventListener on an EventType. If there is no listener on that EventType, nothing will change.
+     *
+     * @param eventType EventType
+     */
+    public void removeEventListener(EventType eventType) {
+        this.eventListeners.remove(eventType);
+    }
+
+    /**
+     * Determines if this Menu should not be interacted with
+     *
+     * @return boolean; true if
+     */
+    public boolean isDisabled() {
+        return Optional.ofNullable(this.getEventListeners()).orElse(List.of()).isEmpty();
     }
 
     /**
