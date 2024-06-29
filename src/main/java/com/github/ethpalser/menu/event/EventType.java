@@ -1,6 +1,6 @@
 package com.github.ethpalser.menu.event;
 
-public enum Event {
+public enum EventType {
     EXECUTE,
     PRE_RENDER,
     RENDER,

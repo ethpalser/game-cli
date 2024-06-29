@@ -1,7 +1,7 @@
 package com.github.ethpalser.menu;
 
 import com.github.ethpalser.menu.event.Displayable;
-import com.github.ethpalser.menu.event.Event;
+import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Result;
 
 public class SimpleMenu<T> extends AbstractMenu implements Displayable<T> {
@@ -27,11 +27,11 @@ public class SimpleMenu<T> extends AbstractMenu implements Displayable<T> {
     }
 
     @Override
-    public Result handleEvent(Event event, String[] args) {
-        if (event == null) {
+    public Result handleEvent(EventType eventType, String[] args) {
+        if (eventType == null) {
             return new Result();
         }
-        return switch (event) {
+        return switch (eventType) {
             case PRE_RENDER -> preRender();
             case RENDER -> onRender();
             case POST_RENDER -> postRender();

@@ -1,7 +1,7 @@
 package com.github.ethpalser.ui;
 
 import com.github.ethpalser.menu.AbstractMenu;
-import com.github.ethpalser.menu.event.Event;
+import com.github.ethpalser.menu.event.EventType;
 import java.util.Set;
 
 public class CommandMenu implements Runnable {
@@ -35,10 +35,10 @@ public class CommandMenu implements Runnable {
             if (this.active == null) {
                 this.setActiveMenu(this.main);
             }
-            this.active.handleEvent(Event.PRE_RENDER, null);
+            this.active.handleEvent(EventType.PRE_RENDER, null);
             do {
-                this.active.handleEvent(Event.RENDER, null);
-                this.active.handleEvent(Event.POST_RENDER, null);
+                this.active.handleEvent(EventType.RENDER, null);
+                this.active.handleEvent(EventType.POST_RENDER, null);
                 // todo: await input from io
                 String input = "";
                 if (this.getEscapeCommands().contains(input)) {
@@ -47,11 +47,11 @@ public class CommandMenu implements Runnable {
                 }
                 AbstractMenu selected = this.active.getChildren().get("");
                 if (this.active.getName().equals(selected.getName())) {
-                    this.active.handleEvent(Event.SELECT, null);
+                    this.active.handleEvent(EventType.SELECT, null);
                     this.active = selected;
                     this.activeUpdated = true;
                 }
-                selected.handleEvent(Event.EXECUTE, null);
+                selected.handleEvent(EventType.EXECUTE, null);
             } while (!this.activeUpdated);
         } while (!close);
         // todo: clean up io

@@ -1,6 +1,6 @@
 package com.github.ethpalser.menu;
 
-import com.github.ethpalser.menu.event.Event;
+import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Executable;
 import com.github.ethpalser.menu.event.Result;
 
@@ -29,11 +29,11 @@ public class ExecutableMenu<T> extends SelectableMenu<T> implements Executable {
     }
 
     @Override
-    public Result handleEvent(Event event, String[] args) {
-        if (event == null) {
+    public Result handleEvent(EventType eventType, String[] args) {
+        if (eventType == null) {
             return new Result();
         }
-        return switch (event) {
+        return switch (eventType) {
             case PRE_RENDER -> this.preRender();
             case RENDER -> this.onRender();
             case POST_RENDER -> this.postRender();

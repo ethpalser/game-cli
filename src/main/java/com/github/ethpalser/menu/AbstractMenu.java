@@ -1,6 +1,6 @@
 package com.github.ethpalser.menu;
 
-import com.github.ethpalser.menu.event.Event;
+import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Result;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,12 +33,12 @@ public abstract class AbstractMenu {
      * Handles an event sent to this object. The result contains data that may be useful for the event emitter.
      * It is recommended to return an empty Result instead of null for events that are not handled.
      *
-     * @param event Event that is to be handled
+     * @param eventType Event that is to be handled
      * @return Result of the event
-     * @see Event
+     * @see EventType
      * @see Result
      */
-    public abstract Result handleEvent(Event event, String[] args);
+    public abstract Result handleEvent(EventType eventType, String[] args);
 
     /**
      * Returns this Menu's children.
