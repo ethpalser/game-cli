@@ -1,5 +1,6 @@
 package com.github.ethpalser.menu;
 
+import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.Result;
 import com.github.ethpalser.menu.event.Selectable;
 
@@ -33,6 +34,18 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
 
     @Override
     public Result onSelect() {
-        return null;
+        return new Result();
+    }
+
+    @Override
+    public Result handleEvent(Event event) {
+        if (event == null) {
+            return new Result();
+        }
+        return switch (event) {
+            case DISPLAY -> this.onRender();
+            case SELECT -> this.onSelect();
+            default -> new Result();
+        };
     }
 }
