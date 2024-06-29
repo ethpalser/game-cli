@@ -4,22 +4,22 @@ import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.Executable;
 import com.github.ethpalser.menu.event.Result;
 
-public class InteractiveMenu<T> extends SelectableMenu<T> implements Executable {
+public class ExecutableMenu<T> extends SelectableMenu<T> implements Executable {
 
-    public InteractiveMenu(String name, boolean isVisible, T display, boolean isAvailable,
+    public ExecutableMenu(String name, boolean isVisible, T display, boolean isAvailable,
             Menu... children) {
         super(name, isVisible, display, isAvailable, children);
     }
 
-    public InteractiveMenu(String name, boolean isVisible, T display, boolean isAvailable) {
+    public ExecutableMenu(String name, boolean isVisible, T display, boolean isAvailable) {
         this(name, isVisible, display, isAvailable, (Menu[]) null);
     }
 
-    public InteractiveMenu(String name, boolean isVisible, T display) {
+    public ExecutableMenu(String name, boolean isVisible, T display) {
         this(name, isVisible, display, true);
     }
 
-    public InteractiveMenu(final String name, final Menu[] children) {
+    public ExecutableMenu(final String name, final Menu[] children) {
         super(name, children);
     }
 
