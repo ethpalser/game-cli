@@ -1,5 +1,6 @@
 package com.github.ethpalser.menu;
 
+import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.EventListener;
 import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Result;
@@ -208,4 +209,24 @@ public abstract class AbstractMenu {
      * @see Result
      */
     public abstract Result handleEvent(EventType eventType, String[] args);
+
+    /**
+     * Accepts an event and defers handling to an event listener for that event. All Exceptions are caught and
+     * returned as a Result containing an error and the exception message. Additionally, Results with an error
+     * are returned for any case where the event cannot be processed, except if no listener is registered for the event.
+     *
+     * @param event Event
+     * @return Result
+     */
+    public Result receiveEvent(Event event) {
+        if (event == null || event.getEventType() == null) {
+            return new Result("cannot resolve null event", true);
+        }
+        try {
+            this.getEventListener(event.getEventType()).ifPresent(listener -> listener.handleEvent(event));
+        } catch (Exception ex) {
+            return new Result(ex.getMessage(), true);
+        }
+        return new Result("event processed", false);
+    }
 }
