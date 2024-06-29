@@ -1,13 +1,14 @@
 package com.github.ethpalser.menu;
 
 import com.github.ethpalser.menu.event.Event;
+import com.github.ethpalser.menu.event.Result;
 import java.util.Map;
 
 public interface Menu {
 
     String getName();
 
-    void handleEvent(Event event);
+    Result handleEvent(Event event);
 
     Map<String, Menu> getChildren();
 
