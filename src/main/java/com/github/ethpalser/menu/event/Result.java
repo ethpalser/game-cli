@@ -10,6 +10,10 @@ public final class Result {
         this.hasError = hasError;
     }
 
+    public Result() {
+        this("", false);
+    }
+
     public Result(final String message) {
         this(message, false);
     }
