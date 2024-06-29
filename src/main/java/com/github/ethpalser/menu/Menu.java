@@ -11,8 +11,6 @@ public class Menu extends MenuItem {
 
     private final Map<String, MenuItem> children;
 
-    private String textDisplay; // alternate to display for screen readers, or primary display as string
-
     public Menu(final String name, final String altDisplayString, final MenuItem[] children) {
         super(name, altDisplayString);
         this.children = new LinkedHashMap<>();
