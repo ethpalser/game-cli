@@ -2,8 +2,8 @@ package com.github.ethpalser.menu;
 
 import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.Result;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Menu objects are containers of data that can contain sub-menus (children). These objects capable of handling events,
@@ -16,7 +16,7 @@ public abstract class Menu {
 
     protected Menu(final String name, final Menu[] children) {
         this.name = name;
-        this.children = new TreeMap<>();
+        this.children = new LinkedHashMap<>();
         this.addChildren(children);
     }
 
@@ -50,6 +50,32 @@ public abstract class Menu {
     }
 
     /**
+     * Returns a single child Menu that matches the given String. If there is no match, null will be returned.
+     *
+     * @param name String representing name of a Menu
+     * @return Menu
+     */
+    public Menu getChild(String name) {
+        return this.children.get(name);
+    }
+
+    /**
+     * Return a single child Menu located at the given index. If the index is out of bounds, null will be returned.
+     * <br><br>
+     * Notice: There may not be an order to the elements, as each Map converted to an array my represent the order
+     * differently. As a result, the returned Menu may not be what is expected.
+     *
+     * @param index integer representing the location in the Menu-storing data structure.
+     * @return Menu
+     */
+    public Menu getChild(int index) {
+        if (this.children.size() <= index) {
+            return null;
+        }
+        return (Menu) this.children.values().toArray()[index];
+    }
+
+    /**
      * Add one or more Menu objects.
      *
      * @param children array of Menu objects
@@ -75,8 +101,8 @@ public abstract class Menu {
      * @param names String array representing a list of Menu names
      */
     public void removeChildren(String... names) {
-        for (String name : names) {
-            this.children.remove(name);
+        for (String childName : names) {
+            this.children.remove(childName);
         }
     }
 
