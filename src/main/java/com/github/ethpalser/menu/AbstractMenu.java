@@ -6,15 +6,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Menu objects are containers of data that can contain sub-menus (children). These objects capable of handling events,
+ * Menu objects are containers of data that can contain sub-menus (children). These objects can handle events
  * that it supports.
  */
-public abstract class Menu {
+public abstract class AbstractMenu {
 
     private final String name;
-    private final Map<String, Menu> children;
+    private final Map<String, AbstractMenu> children;
 
-    protected Menu(final String name, final Menu[] children) {
+    protected AbstractMenu(final String name, final AbstractMenu[] children) {
         this.name = name;
         this.children = new LinkedHashMap<>();
         this.addChildren(children);
@@ -45,7 +45,7 @@ public abstract class Menu {
      *
      * @return Map of Menu name to Menu
      */
-    public Map<String, Menu> getChildren() {
+    public Map<String, AbstractMenu> getChildren() {
         return this.children;
     }
 
@@ -55,7 +55,7 @@ public abstract class Menu {
      * @param name String representing name of a Menu
      * @return Menu
      */
-    public Menu getChild(String name) {
+    public AbstractMenu getChild(String name) {
         return this.children.get(name);
     }
 
@@ -68,11 +68,11 @@ public abstract class Menu {
      * @param index integer representing the location in the Menu-storing data structure.
      * @return Menu
      */
-    public Menu getChild(int index) {
+    public AbstractMenu getChild(int index) {
         if (this.children.size() <= index) {
             return null;
         }
-        return (Menu) this.children.values().toArray()[index];
+        return (AbstractMenu) this.children.values().toArray()[index];
     }
 
     /**
@@ -80,8 +80,8 @@ public abstract class Menu {
      *
      * @param children array of Menu objects
      */
-    public void addChildren(Menu... children) {
-        for (Menu child : children) {
+    public void addChildren(AbstractMenu... children) {
+        for (AbstractMenu child : children) {
             this.children.put(child.getName(), child);
         }
     }
@@ -91,7 +91,7 @@ public abstract class Menu {
      *
      * @param child Menu object
      */
-    public void addChild(Menu child) {
+    public void addChild(AbstractMenu child) {
         addChildren(child);
     }
 

@@ -7,19 +7,19 @@ import com.github.ethpalser.menu.event.Result;
 public class ExecutableMenu<T> extends SelectableMenu<T> implements Executable {
 
     public ExecutableMenu(String name, boolean isVisible, T display, boolean isAvailable,
-            Menu... children) {
+            AbstractMenu... children) {
         super(name, isVisible, display, isAvailable, children);
     }
 
     public ExecutableMenu(String name, boolean isVisible, T display, boolean isAvailable) {
-        this(name, isVisible, display, isAvailable, (Menu[]) null);
+        this(name, isVisible, display, isAvailable, (AbstractMenu[]) null);
     }
 
     public ExecutableMenu(String name, boolean isVisible, T display) {
         this(name, isVisible, display, true);
     }
 
-    public ExecutableMenu(final String name, final Menu[] children) {
+    public ExecutableMenu(final String name, final AbstractMenu[] children) {
         super(name, children);
     }
 

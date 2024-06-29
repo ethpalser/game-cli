@@ -8,13 +8,13 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
 
     private boolean isAvailable;
 
-    public SelectableMenu(String name, boolean isVisible, T display, boolean isAvailable, Menu... children) {
+    public SelectableMenu(String name, boolean isVisible, T display, boolean isAvailable, AbstractMenu... children) {
         super(name, isVisible, display, children);
         this.isAvailable = isAvailable;
     }
 
     public SelectableMenu(String name, boolean isVisible, T display, boolean isAvailable) {
-        this(name, isVisible, display, isAvailable, (Menu[]) null);
+        this(name, isVisible, display, isAvailable, (AbstractMenu[]) null);
         this.isAvailable = true;
     }
 
@@ -22,7 +22,7 @@ public class SelectableMenu<T> extends SimpleMenu<T> implements Selectable {
         this(name, isVisible, display, true);
     }
 
-    public SelectableMenu(final String name, final Menu[] children) {
+    public SelectableMenu(final String name, final AbstractMenu[] children) {
         super(name, children);
         this.isAvailable = false;
     }

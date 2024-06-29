@@ -4,12 +4,12 @@ import com.github.ethpalser.menu.event.Displayable;
 import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.Result;
 
-public class SimpleMenu<T> extends Menu implements Displayable<T> {
+public class SimpleMenu<T> extends AbstractMenu implements Displayable<T> {
 
     private boolean isVisible;
     private T display;
 
-    public SimpleMenu(String name, boolean isVisible, T display, Menu... children) {
+    public SimpleMenu(String name, boolean isVisible, T display, AbstractMenu... children) {
         super(name, children);
         this.isVisible = isVisible;
         this.display = display;
@@ -17,10 +17,10 @@ public class SimpleMenu<T> extends Menu implements Displayable<T> {
     }
 
     public SimpleMenu(String name, boolean isVisible, T display) {
-        this(name, isVisible, display, new Menu[]{});
+        this(name, isVisible, display, new AbstractMenu[]{});
     }
 
-    public SimpleMenu(final String name, final Menu[] children) {
+    public SimpleMenu(final String name, final AbstractMenu[] children) {
         super(name, children);
         this.isVisible = false;
         this.display = null;
