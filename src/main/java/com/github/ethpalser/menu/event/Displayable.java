@@ -20,6 +20,13 @@ public interface Displayable<T> {
     boolean isVisible();
 
     /**
+     * Updates the visibility of the object. Can be used to toggle it visible/invisible.
+     *
+     * @param isVisible boolean (true/false)
+     */
+    void setVisible(boolean isVisible);
+
+    /**
      * Fetches the display that will be rendered.
      *
      * @return Object that will be consumed by a renderer.
@@ -38,20 +45,26 @@ public interface Displayable<T> {
      *
      * @return Result of the action
      */
-    Result preRender();
+    default Result preRender() {
+        return new Result();
+    }
 
     /**
      * Perform an action when this is displayed. This may be before, during or after depending on implementation.
      *
      * @return Result of the action
      */
-    Result onRender();
+    default Result onRender() {
+        return new Result();
+    }
 
     /**
      * Perform an action after this is displayed.
      *
      * @return Result of the action
      */
-    Result postRender();
+    default Result postRender() {
+        return new Result();
+    }
 
 }
