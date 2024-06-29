@@ -29,16 +29,6 @@ public abstract class AbstractMenu {
         return this.name;
     }
 
-    /**
-     * Handles an event sent to this object. The result contains data that may be useful for the event emitter.
-     * It is recommended to return an empty Result instead of null for events that are not handled.
-     *
-     * @param eventType Event that is to be handled
-     * @return Result of the event
-     * @see EventType
-     * @see Result
-     */
-    public abstract Result handleEvent(EventType eventType, String[] args);
 
     /**
      * Returns this Menu's children.
@@ -115,4 +105,14 @@ public abstract class AbstractMenu {
         removeChildren(name);
     }
 
+    /**
+     * Handles an event sent to this object. The result contains data that may be useful for the event emitter.
+     * It is recommended to return an empty Result instead of null for events that are not handled.
+     *
+     * @param eventType Event that is to be handled
+     * @return Result of the event
+     * @see EventType
+     * @see Result
+     */
+    public abstract Result handleEvent(EventType eventType, String[] args);
 }
