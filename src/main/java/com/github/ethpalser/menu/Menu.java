@@ -22,7 +22,7 @@ public class Menu {
 
     private String textDisplay; // alternate to display for screen readers, or primary display as string
 
-    protected Menu(final String name, final Menu[] children, final String altDisplayString) {
+    public Menu(final String name, final Menu[] children, final String altDisplayString) {
         this.name = name;
         this.children = new LinkedHashMap<>();
         this.textDisplay = altDisplayString;
@@ -30,7 +30,7 @@ public class Menu {
         this.addChildren(children);
     }
 
-    protected Menu(final String name, final Menu[] children) {
+    public Menu(final String name, final Menu[] children) {
         this.name = name;
         this.children = new LinkedHashMap<>();
         this.eventListeners = new HashMap<>();
