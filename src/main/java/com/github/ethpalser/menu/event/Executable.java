@@ -11,6 +11,23 @@ package com.github.ethpalser.menu.event;
 public interface Executable {
 
     /**
+     * Determine if the provided arguments are allowed for execution.
+     * <br><br>
+     * Potential checks include:
+     * <ul>
+     *     <li>Valid length of arguments</li>
+     *     <li>Value within allowed bounds</li>
+     *     <li>Matches regular expression</li>
+     * </ul>
+     *
+     * @param args Arguments for customizing execution
+     * @return boolean; false if any check failed, otherwise true
+     */
+    default boolean canExecute(String[] args) {
+        return true;
+    }
+
+    /**
      * Perform an action of the executable.
      *
      * @param args Arguments for customizing execution
