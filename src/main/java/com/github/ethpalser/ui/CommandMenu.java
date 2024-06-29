@@ -1,6 +1,7 @@
 package com.github.ethpalser.ui;
 
 import com.github.ethpalser.menu.Menu;
+import com.github.ethpalser.menu.MenuItem;
 import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.EventType;
 import java.util.Set;
@@ -46,11 +47,13 @@ public class CommandMenu implements Runnable {
                     close = true;
                     break;
                 }
-                Menu selected = this.active.getChildren().get("");
+                MenuItem selected = this.active.getChildren().get("");
                 if (this.active.getName().equals(selected.getName())) {
                     this.active.receiveEvent(new Event(EventType.SELECT));
-                    this.active = selected;
-                    this.activeUpdated = true;
+                    if (selected instanceof Menu) {
+                        this.active = (Menu) selected;
+                        this.activeUpdated = true;
+                    }
                 }
                 this.active.receiveEvent(new Event(EventType.EXECUTE, input));
             } while (!this.activeUpdated);

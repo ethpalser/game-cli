@@ -9,22 +9,22 @@ import java.util.Map;
  */
 public class Menu extends MenuItem {
 
-    private final Map<String, Menu> children;
+    private final Map<String, MenuItem> children;
 
     private String textDisplay; // alternate to display for screen readers, or primary display as string
 
-    public Menu(final String name, final String altDisplayString, final Menu[] children) {
+    public Menu(final String name, final String altDisplayString, final MenuItem[] children) {
         super(name, altDisplayString);
         this.children = new LinkedHashMap<>();
         this.addChildren(children);
     }
 
-    public Menu(final String name, final Menu[] children) {
+    public Menu(final String name, final MenuItem[] children) {
         this(name, "undefined", children);
     }
 
     public Menu(final String name) {
-        this(name, "undefined", new Menu[]{});
+        this(name, "undefined", new MenuItem[]{});
     }
 
     /**
@@ -32,7 +32,7 @@ public class Menu extends MenuItem {
      *
      * @return Map of Menu name to Menu
      */
-    public Map<String, Menu> getChildren() {
+    public Map<String, MenuItem> getChildren() {
         return this.children;
     }
 
@@ -42,7 +42,7 @@ public class Menu extends MenuItem {
      * @param name String representing name of a Menu
      * @return Menu
      */
-    public Menu getChild(String name) {
+    public MenuItem getChild(String name) {
         return this.children.get(name);
     }
 
@@ -55,11 +55,11 @@ public class Menu extends MenuItem {
      * @param index integer representing the location in the Menu-storing data structure.
      * @return Menu
      */
-    public Menu getChild(int index) {
+    public MenuItem getChild(int index) {
         if (this.children.size() <= index) {
             return null;
         }
-        return (Menu) this.children.values().toArray()[index];
+        return (MenuItem) this.children.values().toArray()[index];
     }
 
     /**
@@ -67,8 +67,8 @@ public class Menu extends MenuItem {
      *
      * @param children array of Menu objects
      */
-    public void addChildren(Menu... children) {
-        for (Menu child : children) {
+    public void addChildren(MenuItem... children) {
+        for (MenuItem child : children) {
             this.children.put(child.getName(), child);
         }
     }
@@ -78,7 +78,7 @@ public class Menu extends MenuItem {
      *
      * @param child Menu object
      */
-    public void addChild(Menu child) {
+    public void addChild(MenuItem child) {
         addChildren(child);
     }
 
