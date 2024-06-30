@@ -17,6 +17,8 @@ public class CommandMenu implements Runnable {
     private final Menu main;
     private Menu active;
     private boolean activeUpdated;
+    private CommandMenuReader reader;
+    private CommandMenuWriter writer;
 
     public CommandMenu(Menu main) {
         this.main = main;
@@ -33,6 +35,30 @@ public class CommandMenu implements Runnable {
         return Set.of("exit", "close", "quit", "q");
     }
 
+    private String awaitInput() {
+        if (reader == null) {
+            return null;
+        }
+        try {
+            this.writer.write("\n > ");
+            return this.reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void awaitOutput(String message) {
+        if (writer == null) {
+            return;
+        }
+        try {
+            writer.write(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void sendEvent(Event event, MenuItem receiver) {
         Result result = receiver.receiveEvent(event);
         if (result.hasError()) {
@@ -44,9 +70,9 @@ public class CommandMenu implements Runnable {
      * Establish open streams and run main loop.
      */
     public void open() {
-        CommandMenuReader reader = new CommandMenuReader(new BufferedReader(new InputStreamReader(System.in)));
-        CommandMenuWriter writer = new CommandMenuWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
-        reader.setErrorWriter(writer.getBufferedWriter());
+        this.reader = new CommandMenuReader(new BufferedReader(new InputStreamReader(System.in)));
+        this.writer = new CommandMenuWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+        reader.setErrorWriter(this.writer.getBufferedWriter());
 
         boolean close = false;
         do {
@@ -55,24 +81,11 @@ public class CommandMenu implements Runnable {
             }
             this.sendEvent(new Event(EventType.PRE_RENDER), this.active);
             do {
-                try {
-                    writer.write(this.active.getTextDisplay());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    close = true;
-                    break;
-                }
-
+                this.awaitOutput(this.active.getTextDisplay());
                 this.sendEvent(new Event(EventType.RENDER), this.active);
                 this.sendEvent(new Event(EventType.POST_RENDER), this.active);
 
-                String input = "";
-                try {
-                    input = reader.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                String input = this.awaitInput();
                 if (this.getEscapeCommands().contains(input)) {
                     close = true;
                     break;
