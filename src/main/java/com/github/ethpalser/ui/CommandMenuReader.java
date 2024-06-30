@@ -3,13 +3,14 @@ package com.github.ethpalser.ui;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
 
 public class CommandMenuReader {
 
-    private final static String READER_CLOSED_ERROR_MESSAGE = "reader closed";
-    private final static String INPUT_INVALID_MESSAGE = "invalid input";
+    private static final String READER_CLOSED_ERROR_MESSAGE = "reader closed";
+    private static final String INPUT_INVALID_MESSAGE = "invalid input";
 
     private final Set<String> escapeCommands;
     private final BufferedReader br;
@@ -28,7 +29,7 @@ public class CommandMenuReader {
         return this.br;
     }
 
-    private Set<String> getEscapeCommands() {
+    protected Set<String> getEscapeCommands() {
         return this.escapeCommands;
     }
 
@@ -118,5 +119,98 @@ public class CommandMenuReader {
             this.canWrite = false;
         }
     }
+
+    public String readOption(String[] options) throws IOException {
+        if (!this.canRead) {
+            throw new IOException(READER_CLOSED_ERROR_MESSAGE);
+        }
+
+        do {
+            String input = this.br.readLine();
+            if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
+                return null;
+            }
+
+            String[] args = this.getArgs(input);
+            int index = this.getOptionIndex(input);
+            if (0 <= index && index < options.length) {
+                return options[index] + " " + String.join(" ", args);
+            }
+
+            String option = getFromOptions(input, options);
+            if (option != null) {
+                return option + " " + String.join(" ", args);
+            }
+            this.printErrorMessage(INPUT_INVALID_MESSAGE);
+        } while (true);
+    }
+
+    public String readCommand(String[] options, String regex) throws IOException {
+        if (!this.canRead) {
+            throw new IOException(READER_CLOSED_ERROR_MESSAGE);
+        }
+
+        do {
+            String input = this.br.readLine();
+            if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
+                return null;
+            }
+
+            if (input.matches(regex)) {
+                return input;
+            }
+
+            String[] args = this.getArgs(input);
+            String option = getFromOptions(input, options);
+            if (option != null) {
+                return option + " " + String.join(" ", args);
+            }
+            this.printErrorMessage(INPUT_INVALID_MESSAGE);
+        } while (true);
+    }
+
+    private boolean isEmpty(String input) {
+        return input == null || input.replace("\\s", "").length() != 0;
+    }
+
+    private String[] getArgs(String input) {
+        String regex = "\\s+";
+        if (this.isEmpty(input)) {
+            return new String[]{}; // No args as there is it is null, or is only the option / command name
+        }
+        String[] arr = input.split(regex);
+        if (arr.length > 1) {
+            return Arrays.copyOfRange(arr, 1, arr.length - 1);
+        }
+        return new String[]{};
+    }
+
+    private int getOptionIndex(String input) {
+        if (input == null) {
+            return -1;
+        }
+        String toCheck;
+        if (getArgs(input).length != 0) {
+            toCheck = input.split("\\s+")[0];
+        } else {
+            toCheck = input;
+        }
+        try {
+            return Integer.parseInt(toCheck);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private String getFromOptions(String input, String[] options) {
+        String option = input.split("\\s")[0].toLowerCase(Locale.ROOT);
+        for (String o : options) {
+            if (o.equals(option)) {
+                return option;
+            }
+        }
+        return null;
+    }
+
 
 }
