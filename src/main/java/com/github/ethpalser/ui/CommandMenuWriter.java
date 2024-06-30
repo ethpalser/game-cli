@@ -14,11 +14,16 @@ public class CommandMenuWriter {
         this.bw = ioWriter;
     }
 
+    public BufferedWriter getBufferedWriter() {
+        return this.bw;
+    }
+
     public void write(String message) throws IOException {
         if (!canWrite) {
             throw new IOException(WRITER_CLOSED_ERROR_MESSAGE);
         }
         this.bw.write(message);
+        this.bw.flush();
     }
 
     public void close() throws IOException {

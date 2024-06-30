@@ -24,6 +24,10 @@ public class CommandMenuReader {
         this.escapeCommands = Set.of("exit", "close", "quit", "q");
     }
 
+    public BufferedReader getBufferedReader() {
+        return this.br;
+    }
+
     private Set<String> getEscapeCommands() {
         return this.escapeCommands;
     }
