@@ -1,6 +1,7 @@
 package com.github.ethpalser.menu;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -36,12 +37,13 @@ public class Menu extends MenuItem {
 
     /**
      * Returns a single child Menu that matches the given String. If there is no match, null will be returned.
+     * The name is converted to lower case, as names are stored using only lower case.
      *
      * @param name String representing name of a Menu
      * @return Menu
      */
     public MenuItem getChild(String name) {
-        return this.children.get(name);
+        return this.children.get(name.toLowerCase(Locale.ROOT));
     }
 
     /**
@@ -61,13 +63,16 @@ public class Menu extends MenuItem {
     }
 
     /**
-     * Add one or more Menu objects.
+     * Add one or more Menu objects. The key used is the Menu object's name
      *
      * @param children array of Menu objects
      */
     public void addChildren(MenuItem... children) {
         for (MenuItem child : children) {
-            this.children.put(child.getName(), child);
+            if (child.getName() == null) {
+                throw new IllegalArgumentException("MenuItem child's name cannot be null");
+            }
+            this.children.put(child.getName().toLowerCase(Locale.ROOT), child);
         }
     }
 
