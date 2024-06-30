@@ -5,13 +5,14 @@ import java.io.IOException;
 
 public class CommandMenuWriter {
 
-    private final static String WRITER_CLOSED_ERROR_MESSAGE = "writer closed";
+    private static final String WRITER_CLOSED_ERROR_MESSAGE = "writer closed";
 
     private final BufferedWriter bw;
     private boolean canWrite;
 
     public CommandMenuWriter(final BufferedWriter ioWriter) {
         this.bw = ioWriter;
+        this.canWrite = true;
     }
 
     public BufferedWriter getBufferedWriter() {
