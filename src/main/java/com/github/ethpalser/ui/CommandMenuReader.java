@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 public class CommandMenuReader {
 
+    private static final String READER_PREFIX = "> ";
     private static final String READER_CLOSED_ERROR_MESSAGE = "reader closed";
     private static final String INPUT_INVALID_MESSAGE = "invalid input";
 
@@ -48,6 +50,13 @@ public class CommandMenuReader {
     public void printErrorMessage(String message) throws IOException {
         if (this.bw != null && this.canWrite) {
             this.bw.write(message);
+            this.bw.flush();
+        }
+    }
+
+    public void printPrefixLine(String prefix) throws IOException {
+        if (this.bw != null && this.canWrite) {
+            this.bw.write("\n" + prefix);
             this.bw.flush();
         }
     }
@@ -120,50 +129,52 @@ public class CommandMenuReader {
         }
     }
 
-    public String readOption(String[] options) throws IOException {
+    public String readOption(List<String> options) throws IOException {
         if (!this.canRead) {
             throw new IOException(READER_CLOSED_ERROR_MESSAGE);
         }
 
         do {
+            this.printPrefixLine(READER_PREFIX);
             String input = this.br.readLine();
             if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
-                return null;
+                return input;
             }
 
-            String[] args = this.getArgs(input);
+            String option;
             int index = this.getOptionIndex(input);
-            if (0 <= index && index < options.length) {
-                return options[index] + " " + String.join(" ", args);
+            if (0 <= index && index < options.size()) {
+                option = options.get(index);
+            } else {
+                option = this.getFromOptions(input, options);
             }
 
-            String option = getFromOptions(input, options);
             if (option != null) {
-                return option + " " + String.join(" ", args);
+                return option + " " + String.join(" ", this.getArgs(input));
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
     }
 
-    public String readCommand(String[] options, String regex) throws IOException {
+    public String readCommand(List<String> options, String regex) throws IOException {
         if (!this.canRead) {
             throw new IOException(READER_CLOSED_ERROR_MESSAGE);
         }
 
         do {
+            this.printPrefixLine(READER_PREFIX);
             String input = this.br.readLine();
             if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
-                return null;
+                return input;
             }
 
             if (input.matches(regex)) {
                 return input;
             }
 
-            String[] args = this.getArgs(input);
             String option = getFromOptions(input, options);
             if (option != null) {
-                return option + " " + String.join(" ", args);
+                return option + " " + String.join(" ", this.getArgs(input));
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
@@ -202,11 +213,11 @@ public class CommandMenuReader {
         }
     }
 
-    private String getFromOptions(String input, String[] options) {
+    private String getFromOptions(String input, List<String> options) {
         String option = input.split("\\s")[0].toLowerCase(Locale.ROOT);
         for (String o : options) {
             if (o.equals(option)) {
-                return option;
+                return o;
             }
         }
         return null;
