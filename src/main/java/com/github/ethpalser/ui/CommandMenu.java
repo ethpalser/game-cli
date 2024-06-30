@@ -40,8 +40,7 @@ public class CommandMenu implements Runnable {
             return null;
         }
         try {
-            this.writer.write("\n > ");
-            return this.reader.readLine();
+            return this.reader.readOption(this.active.getChildren().keySet().stream().toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,19 +85,23 @@ public class CommandMenu implements Runnable {
                 this.sendEvent(new Event(EventType.POST_RENDER), this.active);
 
                 String input = this.awaitInput();
-                if (this.getEscapeCommands().contains(input)) {
+                if (input == null || this.getEscapeCommands().contains(input)) {
                     close = true;
                     break;
                 }
-                MenuItem selected = this.active.getChildren().get("");
-                if (this.active.getName().equals(selected.getName())) {
-                    this.sendEvent(new Event(EventType.SELECT), selected);
-                    if (selected instanceof Menu) {
-                        this.active = (Menu) selected;
-                        this.activeUpdated = true;
+                // Split the input, as it may have arguments and would not match a menu option
+                String[] split = input.split("\\s+");
+                MenuItem selected = this.active.getChild(split[0]);
+                if (selected != null) {
+                    if (this.active.getName().equals(selected.getName())) {
+                        this.sendEvent(new Event(EventType.SELECT), selected);
+                        if (selected instanceof Menu) {
+                            this.active = (Menu) selected;
+                            this.activeUpdated = true;
+                        }
                     }
+                    this.sendEvent(new Event(EventType.EXECUTE), selected);
                 }
-                this.sendEvent(new Event(EventType.EXECUTE), selected);
             } while (!this.activeUpdated);
         } while (!close);
 
