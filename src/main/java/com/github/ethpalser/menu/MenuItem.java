@@ -15,11 +15,15 @@ public class MenuItem {
     private final Map<EventType, EventListener> eventListeners;
 
     private String textDisplay; // alternate to display for screen readers, or primary display as string
+    private boolean isDisabled;
+    private boolean isHidden;
 
     public MenuItem(final String name, final String altDisplayString) {
         this.name = name;
         this.textDisplay = altDisplayString;
         this.eventListeners = new HashMap<>();
+        this.isDisabled = false;
+        this.isHidden = false;
     }
 
     public MenuItem(final String name) {
@@ -61,7 +65,14 @@ public class MenuItem {
      * @return boolean (true/false)
      */
     public boolean isHidden() {
-        return false;
+        return this.isHidden;
+    }
+
+    /**
+     * Changes isHidden from true to false and vice versa.
+     */
+    public void toggleHidden() {
+        this.isHidden = !this.isHidden;
     }
 
     /**
@@ -110,7 +121,14 @@ public class MenuItem {
      * @return boolean; true if
      */
     public boolean isDisabled() {
-        return Optional.ofNullable(this.getEventListeners()).orElse(List.of()).isEmpty();
+        return this.isDisabled || Optional.ofNullable(this.getEventListeners()).orElse(List.of()).isEmpty();
+    }
+
+    /**
+     * Change isDisabled to true if false and vice versa.
+     */
+    public void toggleDisabled() {
+        this.isDisabled = !this.isDisabled;
     }
 
     /**
