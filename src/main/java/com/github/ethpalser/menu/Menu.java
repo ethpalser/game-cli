@@ -18,11 +18,11 @@ public class Menu extends MenuItem {
     }
 
     public Menu(final String name, final MenuItem[] children) {
-        this(name, "undefined", children);
+        this(name, name, children);
     }
 
     public Menu(final String name) {
-        this(name, "undefined", new MenuItem[]{});
+        this(name, name, new MenuItem[]{});
     }
 
     /**

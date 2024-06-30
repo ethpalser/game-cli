@@ -23,7 +23,7 @@ public class MenuItem {
     }
 
     public MenuItem(final String name) {
-        this(name, "undefined");
+        this(name, name);
     }
 
     /**
