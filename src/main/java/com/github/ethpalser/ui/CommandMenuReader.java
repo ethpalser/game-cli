@@ -61,65 +61,6 @@ public class CommandMenuReader {
         }
     }
 
-    public String readLine() throws IOException {
-        if (!this.canRead) {
-            throw new IOException(READER_CLOSED_ERROR_MESSAGE);
-        }
-        return this.br.readLine();
-    }
-
-    public String readLine(String regex) throws IOException {
-        if (!this.canRead) {
-            throw new IOException(READER_CLOSED_ERROR_MESSAGE);
-        }
-
-        String response;
-        boolean matchesRegEx;
-        do {
-            response = this.br.readLine();
-            if (this.getEscapeCommands().contains(response.toLowerCase(Locale.ROOT))) {
-                return response;
-            }
-
-            matchesRegEx = response.matches(regex);
-            if (!matchesRegEx) {
-                printErrorMessage(INPUT_INVALID_MESSAGE);
-            }
-        } while (matchesRegEx);
-        return response;
-    }
-
-    public int readChoice(int choiceMin, int choiceMax) throws IOException {
-        if (!this.canRead) {
-            throw new IOException(READER_CLOSED_ERROR_MESSAGE);
-        }
-        int choice = 0;
-        boolean isValidChoice = false;
-        do {
-            String response = this.br.readLine();
-            if (this.getEscapeCommands().contains(response.toLowerCase(Locale.ROOT))) {
-                return -1;
-            }
-
-            try {
-                choice = Integer.parseInt(response);
-            } catch (NumberFormatException ex) {
-                printErrorMessage(INPUT_INVALID_MESSAGE);
-                continue;
-            }
-
-            isValidChoice = choiceMin <= choice && choice <= choiceMax;
-            if (!isValidChoice) {
-                printErrorMessage(INPUT_INVALID_MESSAGE);
-            }
-        } while (!isValidChoice);
-        return choice;
-    }
-
-    public int readChoice(int choiceMax) throws IOException {
-        return this.readChoice(0, choiceMax);
-    }
-
     public void close() throws IOException {
         this.br.close();
         this.canRead = false;
@@ -172,7 +113,7 @@ public class CommandMenuReader {
                 return input;
             }
 
-            String option = getFromOptions(input, options);
+            String option = this.getFromOptions(input, options);
             if (option != null) {
                 return option + " " + String.join(" ", this.getArgs(input));
             }
