@@ -5,6 +5,11 @@ import com.github.ethpalser.menu.MenuItem;
 import com.github.ethpalser.menu.event.Event;
 import com.github.ethpalser.menu.event.EventType;
 import com.github.ethpalser.menu.event.Result;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Set;
 
 public class CommandMenu implements Runnable {
@@ -39,7 +44,10 @@ public class CommandMenu implements Runnable {
      * Establish open streams and run main loop.
      */
     public void open() {
-        // todo: set up io
+        CommandMenuReader reader = new CommandMenuReader(new BufferedReader(new InputStreamReader(System.in)));
+        CommandMenuWriter writer = new CommandMenuWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+        reader.setErrorWriter(writer.getBufferedWriter());
+
         boolean close = false;
         do {
             if (this.active == null) {
@@ -47,10 +55,24 @@ public class CommandMenu implements Runnable {
             }
             this.sendEvent(new Event(EventType.PRE_RENDER), this.active);
             do {
+                try {
+                    writer.write(this.active.getTextDisplay());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    close = true;
+                    break;
+                }
+
                 this.sendEvent(new Event(EventType.RENDER), this.active);
                 this.sendEvent(new Event(EventType.POST_RENDER), this.active);
-                // todo: await input from io
+
                 String input = "";
+                try {
+                    input = reader.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 if (this.getEscapeCommands().contains(input)) {
                     close = true;
                     break;
@@ -66,7 +88,13 @@ public class CommandMenu implements Runnable {
                 this.sendEvent(new Event(EventType.EXECUTE), selected);
             } while (!this.activeUpdated);
         } while (!close);
-        // todo: clean up io
+
+        try {
+            reader.close();
+            writer.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
