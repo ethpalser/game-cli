@@ -100,7 +100,7 @@ public class CommandMenu implements Runnable {
                             this.activeUpdated = true;
                         }
                     }
-                    this.sendEvent(new Event(EventType.EXECUTE), selected);
+                    this.sendEvent(new Event(EventType.EXECUTE, input), selected);
                 }
             } while (!this.activeUpdated);
         } while (!close);
