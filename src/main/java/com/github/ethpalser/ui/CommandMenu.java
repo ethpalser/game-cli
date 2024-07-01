@@ -78,8 +78,8 @@ public class CommandMenu implements Runnable {
             if (this.active == null) {
                 this.setActiveMenu(this.main);
             }
-            this.sendEvent(new Event(EventType.PRE_RENDER), this.active);
             do {
+                this.sendEvent(new Event(EventType.PRE_RENDER), this.active);
                 this.awaitOutput(this.active.getTextDisplay());
                 this.sendEvent(new Event(EventType.RENDER), this.active);
                 this.sendEvent(new Event(EventType.POST_RENDER), this.active);
