@@ -8,7 +8,7 @@ public abstract class ActionMenu extends Menu {
         super(name, altDisplayString, children);
         this.addEventListener(EventType.PRE_RENDER, event -> {
             if (EventType.PRE_RENDER == event.getEventType()) {
-                this.refreshDisplay();
+                this.updateDisplay();
             }
         });
     }
@@ -22,9 +22,10 @@ public abstract class ActionMenu extends Menu {
     }
 
     /**
-     * A wrapper for setTextDisplay that is used be this object's default PRE_REFRESH EventListener. It is preferred
-     * to override this method over setTextDisplay for making
+     * This method executes whenever this Menu receives a PRE_RENDER event, as an EventListener has been added by
+     * default wrapping this method. This method is expected to update this menu's display elements,
+     * including display text.
      */
-    abstract void refreshDisplay();
+    abstract void updateDisplay();
 
 }
