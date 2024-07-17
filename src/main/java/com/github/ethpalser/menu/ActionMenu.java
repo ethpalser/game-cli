@@ -26,6 +26,6 @@ public abstract class ActionMenu extends Menu {
      * default wrapping this method. This method is expected to update this menu's display elements,
      * including display text.
      */
-    abstract void updateDisplay();
+    public abstract void updateDisplay();
 
 }

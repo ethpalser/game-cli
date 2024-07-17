@@ -26,7 +26,7 @@ public abstract class MenuAction extends MenuItem {
      *
      * @return String
      */
-    protected String getInvalidMessage() {
+    public String getInvalidMessage() {
         return "";
     }
 
@@ -36,7 +36,7 @@ public abstract class MenuAction extends MenuItem {
      * @param commandString String representing input received from IO and used for execute().
      * @return boolean
      */
-    protected boolean isValid(String commandString) {
+    public boolean isValid(String commandString) {
         return true;
     }
 
@@ -45,6 +45,6 @@ public abstract class MenuAction extends MenuItem {
      *
      * @param commandString String representing input received from IO.
      */
-    abstract void execute(String commandString);
+    public abstract void execute(String commandString);
 
 }
