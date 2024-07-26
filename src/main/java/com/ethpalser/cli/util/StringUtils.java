@@ -1,4 +1,4 @@
-package com.github.ethpalser.util;
+package com.ethpalser.cli.util;
 
 import java.util.Locale;
 

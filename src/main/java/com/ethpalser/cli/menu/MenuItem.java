@@ -1,9 +1,9 @@
-package com.github.ethpalser.menu;
+package com.ethpalser.cli.menu;
 
-import com.github.ethpalser.menu.event.Event;
-import com.github.ethpalser.menu.event.EventListener;
-import com.github.ethpalser.menu.event.EventType;
-import com.github.ethpalser.menu.event.Result;
+import com.ethpalser.cli.menu.event.Event;
+import com.ethpalser.cli.menu.event.EventListener;
+import com.ethpalser.cli.menu.event.EventType;
+import com.ethpalser.cli.menu.event.Result;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

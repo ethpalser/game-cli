@@ -1,6 +1,4 @@
-package com.github.ethpalser;
-
-import com.github.ethpalser.menu.Menu;
+package com.ethpalser.cli.menu;
 
 public class Context {
 

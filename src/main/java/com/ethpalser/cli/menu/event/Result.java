@@ -1,4 +1,4 @@
-package com.github.ethpalser.menu.event;
+package com.ethpalser.cli.menu.event;
 
 public final class Result {
 

@@ -1,4 +1,4 @@
-package com.github.ethpalser.menu.event;
+package com.ethpalser.cli.menu.event;
 
 /**
  * EventListener objects register to an event and process the event when it occurs.

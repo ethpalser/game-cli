@@ -1,4 +1,4 @@
-package com.github.ethpalser.menu;
+package com.ethpalser.cli.menu;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;

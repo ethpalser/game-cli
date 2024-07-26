@@ -1,4 +1,4 @@
-package com.github.ethpalser.console;
+package com.ethpalser.cli.console;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

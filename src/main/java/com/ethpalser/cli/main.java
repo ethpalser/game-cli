@@ -1,8 +1,8 @@
-package com.github.ethpalser;
+package com.ethpalser.cli;
 
-import com.github.ethpalser.menu.Menu;
-import com.github.ethpalser.menu.SimpleMenu;
-import com.github.ethpalser.console.ConsoleRunner;
+import com.ethpalser.cli.menu.Menu;
+import com.ethpalser.cli.menu.SimpleMenu;
+import com.ethpalser.cli.console.ConsoleRunner;
 
 public class main {
 

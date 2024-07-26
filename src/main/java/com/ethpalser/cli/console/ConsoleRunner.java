@@ -1,11 +1,11 @@
-package com.github.ethpalser.console;
+package com.ethpalser.cli.console;
 
-import com.github.ethpalser.Context;
-import com.github.ethpalser.menu.Menu;
-import com.github.ethpalser.menu.MenuItem;
-import com.github.ethpalser.menu.event.Event;
-import com.github.ethpalser.menu.event.EventType;
-import com.github.ethpalser.menu.event.Result;
+import com.ethpalser.cli.menu.Context;
+import com.ethpalser.cli.menu.Menu;
+import com.ethpalser.cli.menu.MenuItem;
+import com.ethpalser.cli.menu.event.Event;
+import com.ethpalser.cli.menu.event.EventType;
+import com.ethpalser.cli.menu.event.Result;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

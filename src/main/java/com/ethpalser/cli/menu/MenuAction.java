@@ -1,6 +1,6 @@
-package com.github.ethpalser.menu;
+package com.ethpalser.cli.menu;
 
-import com.github.ethpalser.menu.event.EventType;
+import com.ethpalser.cli.menu.event.EventType;
 
 /**
  * An abstract definition of a MenuItem that wraps adding an EventListener for EventType.EXECUTE events.

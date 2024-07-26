@@ -1,6 +1,6 @@
-package com.github.ethpalser.menu;
+package com.ethpalser.cli.menu;
 
-import com.github.ethpalser.util.StringUtils;
+import com.ethpalser.cli.util.StringUtils;
 
 public class SimpleMenu extends Menu {
 
