@@ -12,6 +12,12 @@ public class SimpleMenu extends Menu {
         this(name, new MenuItem[]{});
     }
 
+    /**
+     * Fetches a text representation of the menu as a list of its children. This list starts from
+     * 1 and goes to n, the length of the list, corresponding to its child's name at index i from 0 to n-1.
+     *
+     * @return String representing a list of this menu's children.
+     */
     @Override
     public String getTextDisplay() {
         return this.buildTextDisplayFromChildren(this.getChildren().values().toArray(new MenuItem[0]));
@@ -22,7 +28,7 @@ public class SimpleMenu extends Menu {
         for (int i = 0; i < children.length; i++) {
             if (i != 0)
                 sb.append("\n");
-            sb.append(i).append(". ").append(StringUtils.capitalizeWord(children[i].getName()));
+            sb.append(i + 1).append(". ").append(StringUtils.capitalizeWord(children[i].getName()));
         }
         return sb.toString();
     }
