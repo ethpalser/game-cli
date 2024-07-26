@@ -148,7 +148,7 @@ public class ConsoleReader {
             toCheck = input;
         }
         try {
-            return Integer.parseInt(toCheck);
+            return Integer.parseInt(toCheck) - 1;
         } catch (NumberFormatException e) {
             return -1;
         }
