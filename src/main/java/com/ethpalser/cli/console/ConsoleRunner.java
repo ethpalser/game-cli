@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Set;
 
 public class ConsoleRunner implements Runnable {
@@ -50,7 +51,9 @@ public class ConsoleRunner implements Runnable {
             return null;
         }
         try {
-            return this.reader.readOption(this.getActive().getChildren().keySet().stream().toList());
+            List<String> visibleOptions = this.getActive().getChildren().values()
+                    .stream().filter(child -> !child.isHidden()).map(MenuItem::getName).toList();
+            return this.reader.readOption(visibleOptions);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,7 +105,7 @@ public class ConsoleRunner implements Runnable {
                 // Split the input, as it may have arguments and would not match a menu option
                 String[] split = input.split("\\s+");
                 MenuItem selected = this.getActive().getChild(split[0]);
-                if (selected != null) {
+                if (selected != null && !selected.isDisabled()) {
                     this.sendEvent(new Event(EventType.EXECUTE, input), selected);
                 }
             } while (!this.context.refresh());
