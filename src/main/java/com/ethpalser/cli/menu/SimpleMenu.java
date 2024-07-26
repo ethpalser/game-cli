@@ -25,10 +25,14 @@ public class SimpleMenu extends Menu {
 
     private String buildTextDisplayFromChildren(MenuItem[] children) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < children.length; i++) {
+        int i = 0;
+        for (MenuItem child : children) {
+            if (child.isHidden())
+                continue;
             if (i != 0)
                 sb.append("\n");
             sb.append(i + 1).append(". ").append(StringUtils.capitalizeWord(children[i].getName()));
+            i++;
         }
         return sb.toString();
     }
