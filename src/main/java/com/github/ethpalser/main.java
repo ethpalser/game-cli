@@ -12,7 +12,7 @@ public class main {
         main.addChild(new Menu("start"));
         main.addChild(new Menu("exit"));
 
-        CommandMenu menu = new CommandMenu(main);
+        CommandMenu menu = new CommandMenu(null);
         menu.open();
     }
 

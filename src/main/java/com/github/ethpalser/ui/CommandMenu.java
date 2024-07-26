@@ -1,5 +1,6 @@
 package com.github.ethpalser.ui;
 
+import com.github.ethpalser.Context;
 import com.github.ethpalser.menu.Menu;
 import com.github.ethpalser.menu.MenuItem;
 import com.github.ethpalser.menu.event.Event;
@@ -14,21 +15,30 @@ import java.util.Set;
 
 public class CommandMenu implements Runnable {
 
-    private final Menu main;
-    private Menu active;
-    private boolean activeUpdated;
+    private final Context context;
+    private Menu main;
     private CommandMenuReader reader;
     private CommandMenuWriter writer;
 
-    public CommandMenu(Menu main) {
-        this.main = main;
-        this.active = main;
-        this.activeUpdated = false;
+    public CommandMenu(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("context cannot be null");
+        }
+        this.context = context;
     }
 
-    private void setActiveMenu(final Menu menu) {
-        this.active = menu;
-        this.activeUpdated = true;
+    public CommandMenu(Context context, Menu main) {
+        this(context);
+        this.main = main;
+        this.context.setMenu(this.main);
+    }
+
+    private Menu getActive() {
+        return this.context.getMenu();
+    }
+
+    private void setActive(Menu menu) {
+        this.context.setMenu(menu);
     }
 
     private Set<String> getEscapeCommands() {
@@ -40,7 +50,7 @@ public class CommandMenu implements Runnable {
             return null;
         }
         try {
-            return this.reader.readOption(this.active.getChildren().keySet().stream().toList());
+            return this.reader.readOption(this.getActive().getChildren().keySet().stream().toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,14 +85,14 @@ public class CommandMenu implements Runnable {
 
         boolean close = false;
         do {
-            if (this.active == null) {
-                this.setActiveMenu(this.main);
+            if (this.getActive() == null) {
+                this.setActive(this.main);
             }
             do {
-                this.sendEvent(new Event(EventType.PRE_RENDER), this.active);
-                this.awaitOutput(this.active.getTextDisplay());
-                this.sendEvent(new Event(EventType.RENDER), this.active);
-                this.sendEvent(new Event(EventType.POST_RENDER), this.active);
+                this.sendEvent(new Event(EventType.PRE_RENDER), this.getActive());
+                this.awaitOutput(this.getActive().getTextDisplay());
+                this.sendEvent(new Event(EventType.RENDER), this.getActive());
+                this.sendEvent(new Event(EventType.POST_RENDER), this.getActive());
 
                 String input = this.awaitInput();
                 if (input == null || this.getEscapeCommands().contains(input)) {
@@ -91,18 +101,11 @@ public class CommandMenu implements Runnable {
                 }
                 // Split the input, as it may have arguments and would not match a menu option
                 String[] split = input.split("\\s+");
-                MenuItem selected = this.active.getChild(split[0]);
+                MenuItem selected = this.getActive().getChild(split[0]);
                 if (selected != null) {
-                    if (this.active.getName().equals(selected.getName())) {
-                        this.sendEvent(new Event(EventType.SELECT), selected);
-                        if (selected instanceof Menu) {
-                            this.active = (Menu) selected;
-                            this.activeUpdated = true;
-                        }
-                    }
                     this.sendEvent(new Event(EventType.EXECUTE, input), selected);
                 }
-            } while (!this.activeUpdated);
+            } while (!this.context.refresh());
         } while (!close);
 
         try {
