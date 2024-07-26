@@ -3,11 +3,11 @@ package com.ethpalser.cli.menu.event;
 public class Event {
 
     private final EventType eventType;
-    private final String commandString;
+    private final String command;
 
-    public Event(EventType eventType, String commandString) {
+    public Event(EventType eventType, String command) {
         this.eventType = eventType;
-        this.commandString = commandString;
+        this.command = command;
     }
 
     public Event(EventType eventType) {
@@ -18,7 +18,7 @@ public class Event {
         return eventType;
     }
 
-    public String getCommandString() {
-        return commandString;
+    public String getCommand() {
+        return command;
     }
 }
