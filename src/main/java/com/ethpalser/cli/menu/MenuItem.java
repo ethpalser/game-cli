@@ -141,13 +141,18 @@ public class MenuItem {
      */
     public Result receiveEvent(Event event) {
         if (event == null || event.getEventType() == null) {
-            return new Result("cannot resolve null event", true);
+            return new Result(Result.INVALID_MESSAGE, true);
         }
+        Optional<EventListener> listener = this.getEventListener(event.getEventType());
+        if (listener.isEmpty()) {
+            return new Result(Result.MISSING_MESSAGE + ": for " + event.getEventType(), false);
+        }
+
         try {
-            this.getEventListener(event.getEventType()).ifPresent(listener -> listener.handleEvent(event));
+            listener.ifPresent(l -> l.handleEvent(event));
         } catch (Exception ex) {
-            return new Result(ex.getMessage(), true);
+            return new Result(Result.ERROR_MESSAGE + ": " + ex.getMessage(), true);
         }
-        return new Result("event processed", false);
+        return new Result(Result.SUCCESS_MESSAGE, false);
     }
 }
