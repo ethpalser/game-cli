@@ -1,4 +1,4 @@
-package com.github.ethpalser.ui;
+package com.github.ethpalser.console;
 
 import com.github.ethpalser.Context;
 import com.github.ethpalser.menu.Menu;
@@ -13,21 +13,21 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Set;
 
-public class CommandMenu implements Runnable {
+public class ConsoleRunner implements Runnable {
 
     private final Context context;
     private Menu main;
-    private CommandMenuReader reader;
-    private CommandMenuWriter writer;
+    private ConsoleReader reader;
+    private ConsoleWriter writer;
 
-    public CommandMenu(Context context) {
+    public ConsoleRunner(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("context cannot be null");
         }
         this.context = context;
     }
 
-    public CommandMenu(Context context, Menu main) {
+    public ConsoleRunner(Context context, Menu main) {
         this(context);
         this.main = main;
         this.context.setMenu(this.main);
@@ -79,8 +79,8 @@ public class CommandMenu implements Runnable {
      * Establish open streams and run main loop.
      */
     public void open() {
-        this.reader = new CommandMenuReader(new BufferedReader(new InputStreamReader(System.in)));
-        this.writer = new CommandMenuWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+        this.reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)));
+        this.writer = new ConsoleWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
         reader.setErrorWriter(this.writer.getBufferedWriter());
 
         boolean close = false;

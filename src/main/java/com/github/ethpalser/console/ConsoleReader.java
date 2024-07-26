@@ -1,4 +1,4 @@
-package com.github.ethpalser.ui;
+package com.github.ethpalser.console;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public class CommandMenuReader {
+public class ConsoleReader {
 
     private static final String READER_PREFIX = "> ";
     private static final String READER_CLOSED_ERROR_MESSAGE = "reader closed";
@@ -20,7 +20,7 @@ public class CommandMenuReader {
     private BufferedWriter bw;
     private boolean canWrite;
 
-    public CommandMenuReader(final BufferedReader ioReader) {
+    public ConsoleReader(final BufferedReader ioReader) {
         this.br = ioReader;
         this.canRead = true;
         this.canWrite = false;

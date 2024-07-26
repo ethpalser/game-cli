@@ -1,16 +1,16 @@
-package com.github.ethpalser.ui;
+package com.github.ethpalser.console;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 
-public class CommandMenuWriter {
+public class ConsoleWriter {
 
     private static final String WRITER_CLOSED_ERROR_MESSAGE = "writer closed";
 
     private final BufferedWriter bw;
     private boolean canWrite;
 
-    public CommandMenuWriter(final BufferedWriter ioWriter) {
+    public ConsoleWriter(final BufferedWriter ioWriter) {
         this.bw = ioWriter;
         this.canWrite = true;
     }

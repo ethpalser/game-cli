@@ -2,7 +2,7 @@ package com.github.ethpalser;
 
 import com.github.ethpalser.menu.Menu;
 import com.github.ethpalser.menu.SimpleMenu;
-import com.github.ethpalser.ui.CommandMenu;
+import com.github.ethpalser.console.ConsoleRunner;
 
 public class main {
 
@@ -12,7 +12,7 @@ public class main {
         main.addChild(new Menu("start"));
         main.addChild(new Menu("exit"));
 
-        CommandMenu menu = new CommandMenu(null);
+        ConsoleRunner menu = new ConsoleRunner(null);
         menu.open();
     }
 
