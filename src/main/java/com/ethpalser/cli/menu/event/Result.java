@@ -15,12 +15,13 @@ public final class Result {
         this.hasError = hasError;
     }
 
-    public Result() {
-        this("", false);
-    }
-
-    public Result(final String message) {
-        this(message, false);
+    public Result(final boolean hasError) {
+        this.hasError = hasError;
+        if (hasError) {
+            this.message = SUCCESS_MESSAGE;
+        } else {
+            this.message = ERROR_MESSAGE;
+        }
     }
 
     public String getMessage() {
