@@ -15,6 +15,8 @@ public class ConsoleReader {
     private static final String INPUT_INVALID_MESSAGE = "invalid input";
 
     private final Set<String> escapeCommands;
+    private final Set<String> backCommands;
+    private final Set<String> helpCommands;
     private final BufferedReader br;
     private boolean canRead;
     private BufferedWriter bw;
@@ -24,52 +26,43 @@ public class ConsoleReader {
         this.br = ioReader;
         this.canRead = true;
         this.canWrite = false;
-        this.escapeCommands = Set.of("exit", "close", "quit", "q");
+        this.escapeCommands = Set.of("exit", "close", "quit");
+        this.backCommands = Set.of("back", "previous", "prev");
+        this.helpCommands = Set.of("help");
     }
 
-    public BufferedReader getBufferedReader() {
-        return this.br;
+    public ConsoleReader(final BufferedReader ioReader, final BufferedWriter ioWriter) {
+        this(ioReader);
+        this.bw = ioWriter;
     }
 
-    protected Set<String> getEscapeCommands() {
+    public Set<String> getEscapeCommands() {
         return this.escapeCommands;
     }
 
-    public void setErrorWriter(BufferedWriter ioWriter) {
-        if (this.bw != null) {
-            try {
-                this.bw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        this.bw = ioWriter;
-        this.canWrite = true;
+    public Set<String> getBackCommands() {
+        return this.backCommands;
     }
 
-    public void printErrorMessage(String message) throws IOException {
-        if (this.bw != null && this.canWrite) {
-            this.bw.write(message);
-            this.bw.flush();
-        }
+    public Set<String> getHelpCommands() {
+        return this.helpCommands;
     }
 
-    public void printPrefixLine(String prefix) throws IOException {
-        if (this.bw != null && this.canWrite) {
-            this.bw.write("\n" + prefix);
-            this.bw.flush();
-        }
+    private boolean matchesReservedCommand(String input) {
+        return this.getHelpCommands().contains(input)
+                || this.getBackCommands().contains(input)
+                || this.getEscapeCommands().contains(input);
     }
 
-    public void close() throws IOException {
-        this.br.close();
-        this.canRead = false;
-        if (this.bw != null) {
-            this.bw.close();
-            this.canWrite = false;
-        }
-    }
-
+    /**
+     * Reads an input from a Reader. This requires that the input is a valid option or a special command, such as:
+     * escape commands, back commands, help commands, etc. This option can be the index of an option or its name
+     * from the list of options. The result will be the option in addition to any following text to work as a command.
+     *
+     * @param options List of options to select from
+     * @return String representing the selected option and any following text
+     * @throws IOException An I/O exception occurred with the Reader or Writer.
+     */
     public String readOption(List<String> options) throws IOException {
         if (!this.canRead) {
             throw new IOException(READER_CLOSED_ERROR_MESSAGE);
@@ -78,7 +71,7 @@ public class ConsoleReader {
         do {
             this.printPrefixLine(READER_PREFIX);
             String input = this.br.readLine();
-            if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
+            if (this.matchesReservedCommand(input.toLowerCase(Locale.ROOT))) {
                 return input;
             }
 
@@ -97,6 +90,19 @@ public class ConsoleReader {
         } while (true);
     }
 
+    /**
+     * Reads an input from the Reader. This input must match the regular expression, an option or a special command,
+     * such as: escape commands, back commands, help commands, etc. The option can its name, but not its index (use
+     * readOption to use an option's index). Matching the regular expression takes priority over the option, and
+     * if the option fails to match the regular expression an error may occur handling the option based on its
+     * contract.
+     *
+     * @param options List of options to select from
+     * @param regex   String representing the requirements of an option to use it (i.e. name, flags, values, number
+     *                of arguments).
+     * @return String representing the selected option and any following text
+     * @throws IOException An I/O exception occurred with the Reader or Writer.
+     */
     public String readCommand(List<String> options, String regex) throws IOException {
         if (!this.canRead) {
             throw new IOException(READER_CLOSED_ERROR_MESSAGE);
@@ -119,6 +125,31 @@ public class ConsoleReader {
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
+    }
+
+    public void close() throws IOException {
+        this.canRead = false;
+        this.br.close();
+        if (this.bw != null) {
+            this.canWrite = false;
+            this.bw.close();
+        }
+    }
+
+    private void printErrorMessage(String message) throws IOException {
+        if (this.bw != null && this.canWrite) {
+            this.bw.write(message);
+            this.bw.flush();
+        } else {
+            System.err.println(message);
+        }
+    }
+
+    private void printPrefixLine(String prefix) throws IOException {
+        if (this.bw != null && this.canWrite) {
+            this.bw.write("\n" + prefix);
+            this.bw.flush();
+        }
     }
 
     private boolean isEmpty(String input) {
