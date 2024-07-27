@@ -24,7 +24,7 @@ public class ConsoleReader {
 
     public ConsoleReader(final BufferedReader ioReader) {
         this.br = ioReader;
-        this.canRead = ioReader != null;
+        this.canRead = true;
         this.canWrite = false;
         this.escapeCommands = Set.of("exit", "close", "quit");
         this.backCommands = Set.of("back", "previous", "prev");
@@ -126,6 +126,10 @@ public class ConsoleReader {
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
+    }
+
+    public boolean ready() {
+        return this.canRead;
     }
 
     public void close() throws IOException {

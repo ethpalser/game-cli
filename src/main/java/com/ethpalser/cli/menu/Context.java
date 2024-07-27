@@ -48,11 +48,11 @@ public class Context {
      * @return Menu which has been removed from the stack
      */
     public Menu pop() {
-        if (this.peek() == null) {
+        if (this.menus.peek() == null) {
             return null;
         }
         this.updated = true;
-        return this.pop();
+        return this.menus.pop();
     }
 
     /**

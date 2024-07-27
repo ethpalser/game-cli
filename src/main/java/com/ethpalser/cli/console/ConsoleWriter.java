@@ -12,7 +12,7 @@ public class ConsoleWriter {
 
     public ConsoleWriter(final BufferedWriter ioWriter) {
         this.bw = ioWriter;
-        this.canWrite = ioWriter != null;
+        this.canWrite = true;
     }
 
     /**
@@ -28,6 +28,10 @@ public class ConsoleWriter {
         }
         this.bw.write(message);
         this.bw.flush();
+    }
+
+    public boolean ready() {
+        return this.canWrite;
     }
 
     public void close() throws IOException {

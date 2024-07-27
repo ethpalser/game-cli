@@ -77,6 +77,9 @@ public class ConsoleRunner implements Runnable {
     public void open(ConsoleReader reader, ConsoleWriter writer) {
         boolean close = false;
         do {
+            if (!reader.ready() || !writer.ready()) {
+                break;
+            }
             if (this.getActive() == null) {
                 this.setActive(this.main);
             }
