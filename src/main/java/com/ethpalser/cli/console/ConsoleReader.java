@@ -24,7 +24,7 @@ public class ConsoleReader {
 
     public ConsoleReader(final BufferedReader ioReader) {
         this.br = ioReader;
-        this.canRead = true;
+        this.canRead = ioReader != null;
         this.canWrite = false;
         this.escapeCommands = Set.of("exit", "close", "quit");
         this.backCommands = Set.of("back", "previous", "prev");
@@ -34,6 +34,7 @@ public class ConsoleReader {
     public ConsoleReader(final BufferedReader ioReader, final BufferedWriter ioWriter) {
         this(ioReader);
         this.bw = ioWriter;
+        this.canWrite = ioWriter != null;
     }
 
     public Set<String> getEscapeCommands() {

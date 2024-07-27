@@ -12,7 +12,7 @@ public class ConsoleWriter {
 
     public ConsoleWriter(final BufferedWriter ioWriter) {
         this.bw = ioWriter;
-        this.canWrite = true;
+        this.canWrite = ioWriter != null;
     }
 
     /**
