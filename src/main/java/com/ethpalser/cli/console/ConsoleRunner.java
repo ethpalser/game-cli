@@ -18,8 +18,6 @@ public class ConsoleRunner implements Runnable {
 
     private final Context context;
     private Menu main;
-    private ConsoleReader reader;
-    private ConsoleWriter writer;
 
     public ConsoleRunner(Context context) {
         if (context == null) {
@@ -31,36 +29,40 @@ public class ConsoleRunner implements Runnable {
     public ConsoleRunner(Context context, Menu main) {
         this(context);
         this.main = main;
-        this.context.setMenu(this.main);
+        this.context.push(this.main);
     }
 
     private Menu getActive() {
-        return this.context.getMenu();
+        return this.context.peek();
     }
 
     private void setActive(Menu menu) {
-        this.context.setMenu(menu);
+        this.context.push(menu);
+    }
+
+    private Set<String> getBackCommands() {
+        return Set.of("back", "previous", "prev");
     }
 
     private Set<String> getEscapeCommands() {
-        return Set.of("exit", "close", "quit", "q");
+        return Set.of("exit", "close", "quit");
     }
 
-    private String awaitInput() {
+    private String awaitInput(ConsoleReader reader) {
         if (reader == null) {
             return null;
         }
         try {
             List<String> visibleOptions = this.getActive().getChildren().values()
                     .stream().filter(child -> !child.isHidden()).map(MenuItem::getName).toList();
-            return this.reader.readOption(visibleOptions);
+            return reader.readOption(visibleOptions);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private void awaitOutput(String message) {
+    private void awaitOutput(ConsoleWriter writer, String message) {
         if (writer == null) {
             return;
         }
@@ -81,11 +83,7 @@ public class ConsoleRunner implements Runnable {
     /**
      * Establish open streams and run main loop.
      */
-    public void open() {
-        this.reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)));
-        this.writer = new ConsoleWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
-        reader.setErrorWriter(this.writer.getBufferedWriter());
-
+    public void open(ConsoleReader reader, ConsoleWriter writer) {
         boolean close = false;
         do {
             if (this.getActive() == null) {
@@ -93,20 +91,25 @@ public class ConsoleRunner implements Runnable {
             }
             do {
                 this.sendEvent(new Event(EventType.PRE_RENDER), this.getActive());
-                this.awaitOutput(this.getActive().getTextDisplay());
+                this.awaitOutput(writer, this.getActive().getTextDisplay());
                 this.sendEvent(new Event(EventType.RENDER), this.getActive());
                 this.sendEvent(new Event(EventType.POST_RENDER), this.getActive());
 
-                String input = this.awaitInput();
+                String input = this.awaitInput(reader);
                 if (input == null || this.getEscapeCommands().contains(input)) {
                     close = true;
                     break;
                 }
-                // Split the input, as it may have arguments and would not match a menu option
-                String[] split = input.split("\\s+");
-                MenuItem selected = this.getActive().getChild(split[0]);
-                if (selected != null && !selected.isDisabled()) {
-                    this.sendEvent(new Event(EventType.EXECUTE, input), selected);
+
+                if (this.getBackCommands().contains(input)) {
+                    this.context.pop();
+                } else {
+                    // Split the input, as it may have arguments and would not match a menu option
+                    String[] split = input.split("\\s+");
+                    MenuItem selected = this.getActive().getChild(split[0]);
+                    if (selected != null && !selected.isDisabled()) {
+                        this.sendEvent(new Event(EventType.EXECUTE, input), selected);
+                    }
                 }
             } while (!this.context.refresh());
         } while (!close);
@@ -121,6 +124,9 @@ public class ConsoleRunner implements Runnable {
 
     @Override
     public void run() {
-        this.open();
+        ConsoleReader reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)));
+        ConsoleWriter writer = new ConsoleWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+        reader.setErrorWriter(writer.getBufferedWriter());
+        this.open(reader, writer);
     }
 }
