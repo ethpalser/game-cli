@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Set;
 
 public class ConsoleRunner implements Runnable {
 
@@ -38,14 +37,6 @@ public class ConsoleRunner implements Runnable {
 
     private void setActive(Menu menu) {
         this.context.push(menu);
-    }
-
-    private Set<String> getBackCommands() {
-        return Set.of("back", "previous", "prev");
-    }
-
-    private Set<String> getEscapeCommands() {
-        return Set.of("exit", "close", "quit");
     }
 
     private String awaitInput(ConsoleReader reader) {
@@ -96,12 +87,12 @@ public class ConsoleRunner implements Runnable {
                 this.sendEvent(new Event(EventType.POST_RENDER), this.getActive());
 
                 String input = this.awaitInput(reader);
-                if (input == null || this.getEscapeCommands().contains(input)) {
+                if (input == null || reader.getEscapeCommands().contains(input)) {
                     close = true;
                     break;
                 }
 
-                if (this.getBackCommands().contains(input)) {
+                if (reader.getBackCommands().contains(input)) {
                     this.context.pop();
                 } else {
                     // Split the input, as it may have arguments and would not match a menu option
@@ -124,9 +115,9 @@ public class ConsoleRunner implements Runnable {
 
     @Override
     public void run() {
-        ConsoleReader reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)));
-        ConsoleWriter writer = new ConsoleWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
-        reader.setErrorWriter(writer.getBufferedWriter());
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        ConsoleWriter writer = new ConsoleWriter(bw);
+        ConsoleReader reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)), bw);
         this.open(reader, writer);
     }
 }
