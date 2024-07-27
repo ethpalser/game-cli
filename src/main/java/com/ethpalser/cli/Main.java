@@ -1,11 +1,11 @@
 package com.ethpalser.cli;
 
 import com.ethpalser.cli.console.ConsoleReader;
+import com.ethpalser.cli.console.ConsoleRunner;
 import com.ethpalser.cli.console.ConsoleWriter;
 import com.ethpalser.cli.menu.Context;
 import com.ethpalser.cli.menu.Menu;
 import com.ethpalser.cli.menu.SimpleMenu;
-import com.ethpalser.cli.console.ConsoleRunner;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -21,9 +21,9 @@ public class Main {
 
         ConsoleRunner menu = new ConsoleRunner(Context.getInstance());
 
-        ConsoleReader reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)));
-        ConsoleWriter writer = new ConsoleWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
-        reader.setErrorWriter(writer.getBufferedWriter());
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        ConsoleWriter writer = new ConsoleWriter(bw);
+        ConsoleReader reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)), bw);
         menu.open(reader, writer);
     }
 
