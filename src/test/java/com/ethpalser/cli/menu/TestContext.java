@@ -15,7 +15,7 @@ class TestContext {
     @Test
     void testRefresh_givenMenuChange_thenTrue() {
         Context context = Context.getInstance();
-        context.setMenu(new Menu("empty"));
+        context.push(new Menu("empty"));
         boolean hasRefresh = context.refresh();
         Assertions.assertTrue(hasRefresh);
     }

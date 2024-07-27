@@ -51,10 +51,10 @@ class TestMenu {
         Menu menu = new Menu("test");
         Menu child = new Menu("child");
         menu.addChild(child);
-        menu.addEventListener(EventType.EXECUTE, event -> Context.getInstance().setMenu(child));
+        menu.addEventListener(EventType.EXECUTE, event -> Context.getInstance().push(child));
         Result result = menu.receiveEvent(new Event(EventType.EXECUTE));
         Assertions.assertFalse(result.hasError());
-        Assertions.assertEquals(child, Context.getInstance().getMenu());
+        Assertions.assertEquals(child, Context.getInstance().peek());
     }
 
 }

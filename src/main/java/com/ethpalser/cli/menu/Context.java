@@ -1,12 +1,17 @@
 package com.ethpalser.cli.menu;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Context {
 
     private static Context context;
-    private Menu menu;
+
+    private final Deque<Menu> menus;
     private boolean updated;
 
     private Context() {
+        this.menus = new ArrayDeque<>();
         this.updated = false;
     }
 
@@ -17,16 +22,37 @@ public class Context {
         return context;
     }
 
-    public Menu getMenu() {
-        return this.menu;
+    public Menu peek() {
+        return this.menus.peek();
     }
 
-    public void setMenu(Menu menu) {
-        if (this.menu == menu) {
+    /**
+     * Adds a new Menu to its stack. This becomes the new active Menu. Its updated status is set to true for
+     * handling.
+     *
+     * @param next
+     */
+    public void push(Menu next) {
+        if (this.peek() == next) {
             return;
         }
-        this.menu = menu;
+        this.menus.push(next);
         this.updated = true;
+    }
+
+    /**
+     * Sets the active menu to the previous menu and returns the once active menu back. This operation is effectively
+     * delete, and the returned result is only provided to handle this later. Its updated status set to true for
+     * handling.
+     *
+     * @return Menu which has been removed from the stack
+     */
+    public Menu pop() {
+        if (this.peek() == null) {
+            return null;
+        }
+        this.updated = true;
+        return this.pop();
     }
 
     /**
