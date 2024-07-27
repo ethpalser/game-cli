@@ -15,10 +15,13 @@ public class ConsoleWriter {
         this.canWrite = true;
     }
 
-    public BufferedWriter getBufferedWriter() {
-        return this.bw;
-    }
-
+    /**
+     * Writes a string with the Writer. This can write as long as the writer has not been closed. If the writer is
+     * closed an IOException is thrown.
+     *
+     * @param message String to write
+     * @throws IOException An I/O exception occurred with the Writer or the Writer is closed.
+     */
     public void write(String message) throws IOException {
         if (!canWrite) {
             throw new IOException(WRITER_CLOSED_ERROR_MESSAGE);
@@ -28,8 +31,8 @@ public class ConsoleWriter {
     }
 
     public void close() throws IOException {
-        this.bw.close();
         this.canWrite = false;
+        this.bw.close();
     }
 
 }
