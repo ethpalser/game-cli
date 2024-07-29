@@ -8,10 +8,12 @@ public class Context {
     private static Context context;
 
     private final Deque<Menu> menus;
+    private Menu defaultMenu;
     private boolean updated;
 
     private Context() {
         this.menus = new ArrayDeque<>();
+        this.defaultMenu = null;
         this.updated = false;
     }
 
@@ -22,15 +24,23 @@ public class Context {
         return context;
     }
 
+    /**
+     * Returns the current menu on the stack or a default menu if this stack is empty.
+     *
+     * @return Menu
+     */
     public Menu peek() {
-        return this.menus.peek();
+        if (!this.menus.isEmpty()) {
+            return this.menus.peek();
+        }
+        return this.defaultMenu;
     }
 
     /**
      * Adds a new Menu to its stack. This becomes the new active Menu. Its updated status is set to true for
      * handling.
      *
-     * @param next
+     * @param next Menu
      */
     public void push(Menu next) {
         if (this.peek() == next) {
@@ -48,11 +58,23 @@ public class Context {
      * @return Menu which has been removed from the stack
      */
     public Menu pop() {
-        if (this.menus.peek() == null) {
-            return null;
+        if (this.menus.isEmpty()) {
+            return this.defaultMenu;
         }
         this.updated = true;
         return this.menus.pop();
+    }
+
+    /**
+     * If the size of the menu stack is 0 it is considered empty. This can be used to determine if the ability to
+     * pop the current menu is allowed. There can be a default menu and be empty, which in this case you are
+     * not be allowed to pop. Since pop returns the default menu whenever it is empty this is not needed to wrap
+     * around pop as a safeguard. Instead, this can be used to inform the user they cannot go further back in menus.
+     *
+     * @return true if there are no menus left to remove (pop), otherwise false
+     */
+    public boolean isEmpty() {
+        return this.menus.isEmpty();
     }
 
     /**
@@ -66,6 +88,26 @@ public class Context {
         boolean result = this.updated;
         this.updated = false;
         return result;
+    }
+
+    /**
+     * Sets the default menu to use whenever the menu stack is emptied. It is recommended to set the default menu,
+     * such as a main menu, before or immediately upon using this context. It is up to the user to handle exceptions
+     * if the default is not set.
+     *
+     * @param menu Menu
+     */
+    public void setDefault(Menu menu) {
+        this.defaultMenu = menu;
+    }
+
+    /**
+     * Returns the default menu, such as the main menu.
+     *
+     * @return Menu
+     */
+    public Menu getDefault() {
+        return this.defaultMenu;
     }
 
 }
