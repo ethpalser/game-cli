@@ -91,6 +91,16 @@ public class Context {
     }
 
     /**
+     * Empty the menu stack to ensure only the default menu or null is returned. This is used to return the context
+     * to a consistent state.
+     */
+    public void reset() {
+        while (!this.menus.isEmpty()) {
+            this.menus.pop();
+        }
+    }
+
+    /**
      * Sets the default menu to use whenever the menu stack is emptied. It is recommended to set the default menu,
      * such as a main menu, before or immediately upon using this context. It is up to the user to handle exceptions
      * if the default is not set.

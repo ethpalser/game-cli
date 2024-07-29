@@ -23,6 +23,7 @@ public class ConsoleRunner {
 
     public ConsoleRunner(Context context, Menu main) {
         this(context);
+        this.context.reset();
         this.context.setDefault(main);
     }
 
