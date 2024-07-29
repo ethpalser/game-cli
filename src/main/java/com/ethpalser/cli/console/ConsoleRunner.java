@@ -19,11 +19,11 @@ public class ConsoleRunner {
             throw new IllegalArgumentException("context cannot be null");
         }
         this.context = context;
+        this.context.reset();
     }
 
     public ConsoleRunner(Context context, Menu main) {
         this(context);
-        this.context.reset();
         this.context.setDefault(main);
     }
 
