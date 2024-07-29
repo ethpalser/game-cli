@@ -20,7 +20,7 @@ public class MockConsoleReader extends ConsoleReader {
         }
         String resp = switch (readCount) {
             case 0 -> "-1";
-            case 1 -> "1";
+            case 1 -> options.get(0); // Assuming input was "1"
             case 2 -> "test -flag text";
             case 3 -> "back";
             default -> "exit";
@@ -36,7 +36,7 @@ public class MockConsoleReader extends ConsoleReader {
         }
         String resp = switch (readCount) {
             case 0 -> "-1";
-            case 1 -> "1";
+            case 1 -> options.get(0); // Assuming input was "1"
             case 2 -> "test -flag text";
             case 3 -> "back";
             default -> "exit";
