@@ -18,8 +18,7 @@ public class Main {
         main.addChild(new Menu("resume"));
         main.addChild(new Menu("start"));
         main.addChild(new Menu("exit"));
-
-        ConsoleRunner menu = new ConsoleRunner(Context.getInstance());
+        ConsoleRunner menu = new ConsoleRunner(Context.getInstance(), main);
 
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         ConsoleWriter writer = new ConsoleWriter(bw);
