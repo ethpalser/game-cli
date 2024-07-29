@@ -4,7 +4,7 @@ import com.ethpalser.cli.menu.event.Event;
 import com.ethpalser.cli.menu.event.EventListener;
 import com.ethpalser.cli.menu.event.EventType;
 import com.ethpalser.cli.menu.event.Result;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class MenuItem {
     public MenuItem(final String name, final String altDisplayString) {
         this.name = name;
         this.textDisplay = altDisplayString;
-        this.eventListeners = new HashMap<>();
+        this.eventListeners = new EnumMap<>(EventType.class);
         this.isDisabled = false;
         this.isHidden = false;
     }
