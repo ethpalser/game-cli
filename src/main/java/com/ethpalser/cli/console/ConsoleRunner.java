@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
-public class ConsoleRunner implements Runnable {
+public class ConsoleRunner {
 
     private final Context context;
     private Menu main;
@@ -116,11 +116,4 @@ public class ConsoleRunner implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        ConsoleWriter writer = new ConsoleWriter(bw);
-        ConsoleReader reader = new ConsoleReader(new BufferedReader(new InputStreamReader(System.in)), bw);
-        this.open(reader, writer);
-    }
 }
