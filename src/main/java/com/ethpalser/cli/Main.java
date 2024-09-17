@@ -15,9 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         Menu main = new SimpleMenu("main");
-        main.addChild(new Menu("resume"));
-        main.addChild(new Menu("start"));
-        main.addChild(new Menu("exit"));
+        main.addChild(new Menu("Resume"));
+        main.addChild(new Menu("Start"));
+        main.addChild(new Menu("Exit"));
         ConsoleRunner menu = new ConsoleRunner(Context.getInstance(), main);
 
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
