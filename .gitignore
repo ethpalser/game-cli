@@ -26,3 +26,13 @@ replay_pid*
 # intellij
 .idea
 *.iml
+*.ipr
+*.iws
+
+# auto generated
+build
+out
+
+# gradle
+gradle
+.gradle
