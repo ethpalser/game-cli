@@ -12,7 +12,8 @@ public class ConsoleReader {
 
     private static final String READER_PREFIX = "> ";
     private static final String READER_CLOSED_ERROR_MESSAGE = "reader closed";
-    private static final String INPUT_INVALID_MESSAGE = "invalid input";
+    private static final String INPUT_INVALID_MESSAGE = "input invalid";
+    private static final String INPUT_NULL_MESSAGE = "input unexpected, received nothing";
 
     private final Set<String> escapeCommands;
     private final Set<String> backCommands;
@@ -73,6 +74,11 @@ public class ConsoleReader {
         do {
             this.printPrefixLine(READER_PREFIX);
             String input = this.br.readLine();
+            if (input == null) {
+                this.printErrorMessage(INPUT_NULL_MESSAGE);
+                return "exit";
+            }
+
             if (this.matchesReservedCommand(input.toLowerCase(Locale.ROOT))) {
                 return input;
             }
