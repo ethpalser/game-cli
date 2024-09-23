@@ -50,9 +50,10 @@ public class ConsoleReader {
     }
 
     private boolean matchesReservedCommand(String input) {
-        return this.getHelpCommands().contains(input)
-                || this.getBackCommands().contains(input)
-                || this.getEscapeCommands().contains(input);
+        String lowerInput = input.toLowerCase(Locale.ROOT);
+        return this.getHelpCommands().contains(lowerInput)
+                || this.getBackCommands().contains(lowerInput)
+                || this.getEscapeCommands().contains(lowerInput);
     }
 
     /**
@@ -191,9 +192,9 @@ public class ConsoleReader {
     }
 
     private String getFromOptions(String input, List<String> options) {
-        String option = input.split("\\s")[0].toLowerCase(Locale.ROOT);
+        String option = input.split("\\s")[0];
         for (String o : options) {
-            if (o.equals(option)) {
+            if (o.equalsIgnoreCase(option)) {
                 return o;
             }
         }

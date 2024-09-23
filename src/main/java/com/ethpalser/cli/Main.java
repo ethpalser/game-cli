@@ -16,7 +16,13 @@ public class Main {
     public static void main(String[] args) {
         Menu main = new SimpleMenu("main");
         main.addChild(new Menu("Resume"));
-        main.addChild(new Menu("Start"));
+
+        Menu sub = new SimpleMenu("Start");
+        sub.addChild(new Menu("Basic"));
+        sub.addChild(new Menu("Advanced"));
+        sub.addChild(new Menu("Custom"));
+
+        main.addChild(sub);
         main.addChild(new Menu("Exit"));
         ConsoleRunner menu = new ConsoleRunner(Context.getInstance(), main);
 
