@@ -7,23 +7,32 @@ import com.ethpalser.cli.menu.event.Event;
 import com.ethpalser.cli.menu.event.EventType;
 import com.ethpalser.cli.menu.event.Result;
 import com.ethpalser.cli.menu.exception.InvalidContextException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 public class ConsoleRunner {
 
     private final Context context;
+    private final ConsoleReader reader;
+    private final ConsoleWriter writer;
 
-    public ConsoleRunner(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("context cannot be null");
-        }
-        this.context = context;
+    public ConsoleRunner() {
+        this.context = Context.getInstance();
         this.context.reset();
+        this.context.setDefault(null);
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        this.writer = new ConsoleWriter(bw);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        this.reader = new ConsoleReader(br, bw);
     }
 
-    public ConsoleRunner(Context context, Menu main) {
-        this(context);
+    public ConsoleRunner(Menu main) {
+        this();
         this.context.setDefault(main);
     }
 
@@ -104,27 +113,35 @@ public class ConsoleRunner {
         return true;
     }
 
+    public boolean ready() {
+        return this.reader.ready() && this.writer.ready() && this.context.getDefault() != null;
+    }
+
     /**
      * Runs main loop to call runCycle. Closes reader and writer after an escape command is registered in runCycle.
-     * Running open
-     *
-     * @param reader ConsoleReader that handles IO reads
-     * @param writer ConsoleWriter that handles IO writes
      */
-    public void open(ConsoleReader reader, ConsoleWriter writer) {
-        boolean canRun = reader.ready() && writer.ready() && this.context.getDefault() != null;
+    public void open() {
+        boolean canRun = this.ready();
         while (canRun) {
             try {
-                canRun = this.runCycle(reader, writer);
+                // Ready checks are always performed in case the state is changed unexpectedly
+                canRun = this.ready() && this.runCycle(this.reader, this.writer);
             } catch (InvalidContextException ex) {
                 System.err.println(ex.getMessage());
             } catch (IOException ioEx) {
                 ioEx.printStackTrace();
             }
         }
+        this.close();
+    }
+
+    /**
+     * Closes reader and writer preventing further input from the user and ends the program.
+     */
+    public void close() {
         try {
-            reader.close();
-            writer.close();
+            this.reader.close();
+            this.writer.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

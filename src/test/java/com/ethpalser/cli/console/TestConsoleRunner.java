@@ -40,7 +40,7 @@ class TestConsoleRunner {
     void testRunCycle_givenInvalidOption_thenNoExecute() throws InvalidContextException, IOException {
         // Main has a listener on every event that updates the eventOccurredSet to have that event, if it is received
         Menu main = this.testMainMenu();
-        ConsoleRunner runner = new ConsoleRunner(Context.getInstance(), main);
+        ConsoleRunner runner = new ConsoleRunner(main);
         ConsoleReader reader = new MockConsoleReader();
         ConsoleWriter writer = new MockConsoleWriter();
 
@@ -60,7 +60,7 @@ class TestConsoleRunner {
         Menu main = this.testMainMenu();
         main.addChild(this.testAction()); // Valid as option "1"
 
-        ConsoleRunner runner = new ConsoleRunner(Context.getInstance(), main);
+        ConsoleRunner runner = new ConsoleRunner(main);
         ConsoleReader reader = new MockConsoleReader();
         ConsoleWriter writer = new MockConsoleWriter();
 
@@ -88,7 +88,7 @@ class TestConsoleRunner {
         MenuItem submenu = this.testSubmenu();
         main.addChild(submenu); // Valid as option "test"
 
-        ConsoleRunner runner = new ConsoleRunner(Context.getInstance(), main);
+        ConsoleRunner runner = new ConsoleRunner(main);
         ConsoleReader reader = new MockConsoleReader();
         ConsoleWriter writer = new MockConsoleWriter();
 
@@ -120,7 +120,7 @@ class TestConsoleRunner {
         MenuItem submenu = this.testSubmenu();
         main.addChild(submenu); // Valid as option "test"
 
-        ConsoleRunner runner = new ConsoleRunner(Context.getInstance(), main);
+        ConsoleRunner runner = new ConsoleRunner(main);
         ConsoleReader reader = new MockConsoleReader();
         ConsoleWriter writer = new MockConsoleWriter();
 
@@ -155,7 +155,7 @@ class TestConsoleRunner {
         MenuItem submenu = this.testSubmenu();
         main.addChild(submenu); // Valid as option "test"
 
-        ConsoleRunner runner = new ConsoleRunner(Context.getInstance(), main);
+        ConsoleRunner runner = new ConsoleRunner(main);
         ConsoleReader reader = new MockConsoleReader();
         ConsoleWriter writer = new MockConsoleWriter();
 
@@ -190,7 +190,7 @@ class TestConsoleRunner {
         Menu main = this.testMainMenu();
         main.addChild(this.testSubmenu()); // Valid as option "test"
 
-        ConsoleRunner runner = new ConsoleRunner(Context.getInstance(), main);
+        ConsoleRunner runner = new ConsoleRunner(main);
         ConsoleReader reader = new MockConsoleReader();
         ConsoleWriter writer = new MockConsoleWriter();
 
@@ -200,7 +200,7 @@ class TestConsoleRunner {
             // This shouldn't happen as mock reader has no IO
             e.printStackTrace();
         }
-        runner.open(reader, writer);
+        runner.open();
 
         Assertions.assertFalse(eventOccurredSet.contains(EventType.PRE_RENDER));
         Assertions.assertFalse(eventOccurredSet.contains(EventType.RENDER));
