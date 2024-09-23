@@ -191,15 +191,7 @@ class TestConsoleRunner {
         main.addChild(this.testSubmenu()); // Valid as option "test"
 
         ConsoleRunner runner = new ConsoleRunner(main);
-        ConsoleReader reader = new MockConsoleReader();
-        ConsoleWriter writer = new MockConsoleWriter();
-
-        try {
-            reader.close();
-        } catch (IOException e) {
-            // This shouldn't happen as mock reader has no IO
-            e.printStackTrace();
-        }
+        runner.close();
         runner.open();
 
         Assertions.assertFalse(eventOccurredSet.contains(EventType.PRE_RENDER));
