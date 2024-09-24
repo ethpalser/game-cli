@@ -1,5 +1,6 @@
 package com.ethpalser.cli.menu;
 
+import com.ethpalser.cli.menu.event.EventType;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -16,6 +17,10 @@ public class Menu extends MenuItem {
         super(name, altDisplayString);
         this.children = new LinkedHashMap<>();
         this.addChildren(children);
+
+        this.addEventListener(EventType.SELECT, event -> {
+            Context.getInstance().push(this);
+        });
     }
 
     public Menu(final String name, final MenuItem[] children) {
