@@ -92,7 +92,12 @@ public class ConsoleReader {
             }
 
             if (option != null) {
-                return option + " " + String.join(" ", this.getArgs(input));
+                String[] args = this.getArgs(input);
+                if (args.length > 0) {
+                    return option + " " + String.join(" ", args);
+                } else {
+                    return option;
+                }
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
@@ -129,7 +134,12 @@ public class ConsoleReader {
 
             String option = this.getFromOptions(input, options);
             if (option != null) {
-                return option + " " + String.join(" ", this.getArgs(input));
+                String[] args = this.getArgs(input);
+                if (args.length > 0) {
+                    return option + " " + String.join(" ", args);
+                } else {
+                    return option;
+                }
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
