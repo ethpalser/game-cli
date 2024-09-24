@@ -1,5 +1,6 @@
 package com.ethpalser.cli.console;
 
+import com.ethpalser.cli.util.Pair;
 import java.util.List;
 
 public class MockConsoleReader extends ConsoleReader {
@@ -14,32 +15,32 @@ public class MockConsoleReader extends ConsoleReader {
     }
 
     @Override
-    public String readOption(List<String> options) {
+    public Pair<String, String[]> readOption(List<String> options) {
         if (!canRead) {
             return null;
         }
-        String resp = switch (readCount) {
-            case 0 -> "-1";
-            case 1 -> options.get(0); // Assuming input was "1"
-            case 2 -> "test -flag text";
-            case 3 -> "back";
-            default -> "exit";
+        Pair<String, String[]> resp = switch (readCount) {
+            case 0 -> new Pair<>("-1", null);
+            case 1 -> new Pair<>(options.get(0), null); // Assuming input was "1"
+            case 2 -> new Pair<>("test", new String[]{"-flag", "text"});
+            case 3 -> new Pair<>("back", null);
+            default -> new Pair<>("exit", null);
         };
         this.readCount++;
         return resp;
     }
 
     @Override
-    public String readCommand(List<String> options, String regex) {
+    public Pair<String, String[]> readCommand(List<String> options, String regex) {
         if (!canRead) {
             return null;
         }
-        String resp = switch (readCount) {
-            case 0 -> "-1";
-            case 1 -> options.get(0); // Assuming input was "1"
-            case 2 -> "test -flag text";
-            case 3 -> "back";
-            default -> "exit";
+        Pair<String, String[]> resp = switch (readCount) {
+            case 0 -> new Pair<>("-1", null);
+            case 1 -> new Pair<>(options.get(0), null); // Assuming input was "1"
+            case 2 -> new Pair<>("test", new String[]{"-flag", "text"});
+            case 3 -> new Pair<>("back", null);
+            default -> new Pair<>("exit", null);
         };
         this.readCount++;
         return resp;

@@ -7,6 +7,7 @@ import com.ethpalser.cli.menu.event.Event;
 import com.ethpalser.cli.menu.event.EventType;
 import com.ethpalser.cli.menu.event.Result;
 import com.ethpalser.cli.menu.exception.InvalidContextException;
+import com.ethpalser.cli.util.Pair;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -39,16 +40,16 @@ public class ConsoleRunner {
         this.context.setDefault(main);
     }
 
-    private String awaitInput(ConsoleReader reader, List<String> options) {
+    private Pair<String, String[]> awaitInput(ConsoleReader reader, List<String> options) {
         if (reader == null) {
-            return null;
+            return new Pair<>("", null);
         }
         try {
             return reader.readOption(options);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return new Pair<>("", null);
     }
 
     private void awaitOutput(ConsoleWriter writer, String message) {
@@ -100,15 +101,15 @@ public class ConsoleRunner {
                 .stream().filter(child -> !child.isHidden())
                 .map(MenuItem::getName)
                 .toList();
-        String input = this.awaitInput(reader, visibleOptions);
-        if (input == null || reader.getEscapeCommands().contains(input)) {
+        Pair<String, String[]> input = this.awaitInput(reader, visibleOptions);
+        if (input == null || reader.getEscapeCommands().contains(input.getFirst())) {
             writer.write("Closing the program, are you sure? (yes/no)");
-            String confirm = this.awaitInput(reader, CONFIRM_OPTIONS);
+            String confirm = this.awaitInput(reader, CONFIRM_OPTIONS).getFirst();
             boolean close = "y".equalsIgnoreCase(confirm) || "yes".equalsIgnoreCase(confirm);
 
             if (close && this.context.peek().isSubmitOnLeave()) {
                 writer.write("Closing with changes, do you want to save your changes? (yes/no)");
-                String doubleConfirm = this.awaitInput(reader, CONFIRM_OPTIONS);
+                String doubleConfirm = this.awaitInput(reader, CONFIRM_OPTIONS).getFirst();
                 if ("y".equalsIgnoreCase(doubleConfirm) || "yes".equalsIgnoreCase(doubleConfirm)) {
                     this.sendEvent(new Event(EventType.ON_CLOSE, null), this.context.peek());
                 }
@@ -117,21 +118,19 @@ public class ConsoleRunner {
             return !close;
         }
 
-        if (reader.getBackCommands().contains(input)) {
+        if (reader.getBackCommands().contains(input.getFirst())) {
             if (this.context.peek().isSubmitOnLeave()) {
                 writer.write("Leaving with changes, do you want to save your changes? (yes/no)");
-                String confirmation = this.awaitInput(reader, CONFIRM_OPTIONS);
+                String confirmation = this.awaitInput(reader, CONFIRM_OPTIONS).getFirst();
                 if ("y".equalsIgnoreCase(confirmation) || "yes".equalsIgnoreCase(confirmation)) {
                     this.sendEvent(new Event(EventType.ON_CLOSE, null), this.context.peek());
                 }
             }
             this.context.pop();
         } else {
-            // Split the input, as it may have arguments and would not match a menu option
-            String[] split = input.split("\\s+");
-            MenuItem selected = activeMenu.getChild(split[0]);
+            MenuItem selected = activeMenu.getChild(input.getFirst());
             if (selected != null && !selected.isDisabled()) {
-                this.sendEvent(new Event(EventType.SELECT, input), selected);
+                this.sendEvent(new Event(EventType.SELECT, input.getFirst(), input.getLast()), selected);
             }
         }
         return true;

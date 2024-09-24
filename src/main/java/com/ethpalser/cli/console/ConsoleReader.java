@@ -1,5 +1,6 @@
 package com.ethpalser.cli.console;
 
+import com.ethpalser.cli.util.Pair;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class ConsoleReader {
      * @return String representing the selected option and any following text
      * @throws IOException An I/O exception occurred with the Reader or Writer.
      */
-    public String readOption(List<String> options) throws IOException {
+    public Pair<String, String[]> readOption(List<String> options) throws IOException {
         if (!this.canRead) {
             throw new IOException(READER_CLOSED_ERROR_MESSAGE);
         }
@@ -76,11 +77,11 @@ public class ConsoleReader {
             String input = this.br.readLine();
             if (input == null) {
                 this.printErrorMessage(INPUT_NULL_MESSAGE);
-                return "exit";
+                return new Pair<>("exit", null);
             }
 
             if (this.matchesReservedCommand(input.toLowerCase(Locale.ROOT))) {
-                return input;
+                return new Pair<>(input, null);
             }
 
             String option;
@@ -92,12 +93,7 @@ public class ConsoleReader {
             }
 
             if (option != null) {
-                String[] args = this.getArgs(input);
-                if (args.length > 0) {
-                    return option + " " + String.join(" ", args);
-                } else {
-                    return option;
-                }
+                return new Pair<>(option, this.getArgs(input));
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
@@ -116,7 +112,7 @@ public class ConsoleReader {
      * @return String representing the selected option and any following text
      * @throws IOException An I/O exception occurred with the Reader or Writer.
      */
-    public String readCommand(List<String> options, String regex) throws IOException {
+    public Pair<String, String[]> readCommand(List<String> options, String regex) throws IOException {
         if (!this.canRead) {
             throw new IOException(READER_CLOSED_ERROR_MESSAGE);
         }
@@ -125,21 +121,16 @@ public class ConsoleReader {
             this.printPrefixLine(READER_PREFIX);
             String input = this.br.readLine();
             if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
-                return input;
+                return new Pair<>("exit", null);
             }
 
             if (input.matches(regex)) {
-                return input;
+                return new Pair<>(input.toLowerCase(Locale.ROOT), null);
             }
 
             String option = this.getFromOptions(input, options);
             if (option != null) {
-                String[] args = this.getArgs(input);
-                if (args.length > 0) {
-                    return option + " " + String.join(" ", args);
-                } else {
-                    return option;
-                }
+                new Pair<>(option.toLowerCase(Locale.ROOT), this.getArgs(input));
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);

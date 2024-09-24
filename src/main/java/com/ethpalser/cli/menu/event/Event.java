@@ -4,10 +4,16 @@ public class Event {
 
     private final EventType eventType;
     private final String command;
+    private final String[] args;
 
     public Event(EventType eventType, String command) {
+        this(eventType, command, null);
+    }
+
+    public Event(EventType eventType, String command, String[] args) {
         this.eventType = eventType;
         this.command = command;
+        this.args = args;
     }
 
     public Event(EventType eventType) {
@@ -15,10 +21,14 @@ public class Event {
     }
 
     public EventType getEventType() {
-        return eventType;
+        return this.eventType;
     }
 
     public String getCommand() {
-        return command;
+        return this.command;
+    }
+
+    public String[] getArgs() {
+        return this.args;
     }
 }

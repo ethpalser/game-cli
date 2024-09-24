@@ -4,6 +4,8 @@ import java.util.Locale;
 
 public class StringUtils {
 
+    private StringUtils(){}
+
     public static String capitalizeWord(String word) {
         if (word == null) {
             return null;
