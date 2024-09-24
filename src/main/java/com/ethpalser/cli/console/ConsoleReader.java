@@ -93,6 +93,10 @@ public class ConsoleReader {
             }
 
             if (option != null) {
+                // reserved commands override options
+                if (this.matchesReservedCommand(option.toLowerCase(Locale.ROOT))) {
+                    return new Pair<>(option.toLowerCase(Locale.ROOT), null);
+                }
                 return new Pair<>(option, this.getArgs(input));
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
@@ -120,17 +124,22 @@ public class ConsoleReader {
         do {
             this.printPrefixLine(READER_PREFIX);
             String input = this.br.readLine();
-            if (this.getEscapeCommands().contains(input.toLowerCase(Locale.ROOT))) {
+            if (input == null) {
+                this.printErrorMessage(INPUT_NULL_MESSAGE);
+                return new Pair<>("exit", null);
+            }
+
+            if (this.getEscapeCommands().contains(input)) {
                 return new Pair<>("exit", null);
             }
 
             if (input.matches(regex)) {
-                return new Pair<>(input.toLowerCase(Locale.ROOT), null);
+                return new Pair<>(input, null);
             }
 
             String option = this.getFromOptions(input, options);
             if (option != null) {
-                new Pair<>(option.toLowerCase(Locale.ROOT), this.getArgs(input));
+                return new Pair<>(option, this.getArgs(input));
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
