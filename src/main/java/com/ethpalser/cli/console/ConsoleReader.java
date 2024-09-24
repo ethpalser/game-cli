@@ -80,24 +80,25 @@ public class ConsoleReader {
                 return new Pair<>("exit", null);
             }
 
-            if (this.matchesReservedCommand(input.toLowerCase(Locale.ROOT))) {
-                return new Pair<>(input, null);
+            Pair<String, String[]> parts = this.getParts(input);
+            if (this.matchesReservedCommand(parts.getFirst().toLowerCase(Locale.ROOT))) {
+                return parts;
             }
 
             String option;
-            int index = this.getOptionIndex(input);
+            int index = this.getOptionIndex(parts.getFirst());
             if (0 <= index && index < options.size()) {
                 option = options.get(index);
             } else {
-                option = this.getFromOptions(input, options);
+                option = this.getFromOptions(parts.getFirst(), options);
             }
 
             if (option != null) {
                 // reserved commands override options
                 if (this.matchesReservedCommand(option.toLowerCase(Locale.ROOT))) {
-                    return new Pair<>(option.toLowerCase(Locale.ROOT), null);
+                    return new Pair<>(parts.getFirst().toLowerCase(), parts.getLast());
                 }
-                return new Pair<>(option, this.getArgs(input));
+                return parts;
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
@@ -129,17 +130,18 @@ public class ConsoleReader {
                 return new Pair<>("exit", null);
             }
 
-            if (this.getEscapeCommands().contains(input)) {
+            Pair<String, String[]> parts = this.getParts(input);
+            if (input.matches(regex)) {
+                return parts;
+            }
+
+            if (this.getEscapeCommands().contains(parts.getFirst())) {
                 return new Pair<>("exit", null);
             }
 
-            if (input.matches(regex)) {
-                return new Pair<>(input, null);
-            }
-
-            String option = this.getFromOptions(input, options);
+            String option = this.getFromOptions(parts.getFirst(), options);
             if (option != null) {
-                return new Pair<>(option, this.getArgs(input));
+                return parts;
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
@@ -175,42 +177,35 @@ public class ConsoleReader {
     }
 
     private boolean isEmpty(String input) {
-        return input == null || input.replace("\\s", "").length() != 0;
+        return input == null || input.replace("\\s", "").length() == 0;
     }
 
-    private String[] getArgs(String input) {
+    private Pair<String, String[]> getParts(String input) {
         String regex = "\\s+";
         if (this.isEmpty(input)) {
-            return new String[]{}; // No args as there is it is null, or is only the option / command name
+            return new Pair<>("", new String[]{}); // No args as there is it is null, or is only the option / command name
         }
         String[] arr = input.split(regex);
         if (arr.length > 1) {
-            return Arrays.copyOfRange(arr, 1, arr.length - 1);
+            return new Pair<>(arr[0], Arrays.copyOfRange(arr, 1, arr.length));
         }
-        return new String[]{};
+        return new Pair<>(arr[0], null);
     }
 
-    private int getOptionIndex(String input) {
-        if (input == null) {
+    private int getOptionIndex(String command) {
+        if (command == null) {
             return -1;
         }
-        String toCheck;
-        if (getArgs(input).length != 0) {
-            toCheck = input.split("\\s+")[0];
-        } else {
-            toCheck = input;
-        }
         try {
-            return Integer.parseInt(toCheck) - 1;
+            return Integer.parseInt(command) - 1;
         } catch (NumberFormatException e) {
             return -1;
         }
     }
 
-    private String getFromOptions(String input, List<String> options) {
-        String option = input.split("\\s")[0];
+    private String getFromOptions(String command, List<String> options) {
         for (String o : options) {
-            if (o.equalsIgnoreCase(option)) {
+            if (o.equalsIgnoreCase(command)) {
                 return o;
             }
         }

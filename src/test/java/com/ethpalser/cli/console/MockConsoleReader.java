@@ -24,7 +24,7 @@ public class MockConsoleReader extends ConsoleReader {
             case 1 -> new Pair<>(options.get(0), null); // Assuming input was "1"
             case 2 -> new Pair<>("test", new String[]{"-flag", "text"});
             case 3 -> new Pair<>("back", null);
-            default -> new Pair<>("exit", null);
+            default -> new Pair<>("exit", new String[]{"-y"});
         };
         this.readCount++;
         return resp;
@@ -40,7 +40,7 @@ public class MockConsoleReader extends ConsoleReader {
             case 1 -> new Pair<>(options.get(0), null); // Assuming input was "1"
             case 2 -> new Pair<>("test", new String[]{"-flag", "text"});
             case 3 -> new Pair<>("back", null);
-            default -> new Pair<>("exit", null);
+            default -> new Pair<>("exit", new String[]{"-y"});
         };
         this.readCount++;
         return resp;

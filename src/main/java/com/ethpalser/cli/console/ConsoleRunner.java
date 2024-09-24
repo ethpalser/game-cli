@@ -105,8 +105,18 @@ public class ConsoleRunner {
         Pair<String, String[]> input = this.awaitInput(reader, visibleOptions);
         if (input == null || reader.getEscapeCommands().contains(input.getFirst())) {
             // All visible options are capitalized words and all reserved commands are only lower case
-            if (input != null && visibleOptions.contains(StringUtils.capitalizeWord(input.getFirst()))) {
-                return false; // Confirmation is not required if it is an option
+            if (input != null) {
+                if (visibleOptions.contains(StringUtils.capitalizeWord(input.getFirst()))) {
+                    return false; // Confirmation is not required if it is an option
+                }
+                if (input.getLast() != null && input.getLast().length > 0) {
+                    if (input.getLast()[0].equals("-y")) {
+                        return false;
+                    } else if (input.getLast()[0].equals("-n")) {
+                        return true;
+                    }
+                    // otherwise, go through manual confirmation
+                }
             }
 
             writer.write("Closing the program, are you sure? (yes/no)");

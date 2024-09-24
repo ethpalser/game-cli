@@ -12,7 +12,7 @@ class TestMenu {
     @Test
     void testReceiveEvent_givenNoEventListener_thenResultMessageIsNotSuccess() {
         Menu menu = new Menu("test");
-        Result result = menu.receiveEvent(new Event(EventType.SELECT));
+        Result result = menu.receiveEvent(new Event(EventType.ON_CLOSE));
         Assertions.assertFalse(result.hasError());
         // This assumes the result's success message is using the default message for this assertion to pass
         Assertions.assertNotEquals(Result.SUCCESS_MESSAGE, result.getMessage());
