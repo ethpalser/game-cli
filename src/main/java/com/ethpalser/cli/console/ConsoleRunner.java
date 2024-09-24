@@ -12,9 +12,12 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConsoleRunner {
+
+    private static final List<String> CONFIRM_OPTIONS = Arrays.asList("n", "y", "no", "yes");
 
     private final Context context;
     private final ConsoleReader reader;
@@ -100,7 +103,7 @@ public class ConsoleRunner {
         String input = this.awaitInput(reader, visibleOptions);
         if (input == null || reader.getEscapeCommands().contains(input)) {
             writer.write("Closing the program, are you sure? (yes/no)");
-            String confirmation = this.awaitInput(reader, List.of("y", "n", "yes", "no"));
+            String confirmation = this.awaitInput(reader, CONFIRM_OPTIONS);
             return "n".equalsIgnoreCase(confirmation) || "no".equalsIgnoreCase(confirmation);
         }
 
@@ -111,7 +114,7 @@ public class ConsoleRunner {
             String[] split = input.split("\\s+");
             MenuItem selected = activeMenu.getChild(split[0]);
             if (selected != null && !selected.isDisabled()) {
-                this.sendEvent(new Event(EventType.EXECUTE, input), selected);
+                this.sendEvent(new Event(EventType.SELECT, input), selected);
             }
         }
         return true;

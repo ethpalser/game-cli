@@ -12,7 +12,7 @@ class TestMenu {
     @Test
     void testReceiveEvent_givenNoEventListener_thenResultMessageIsNotSuccess() {
         Menu menu = new Menu("test");
-        Result result = menu.receiveEvent(new Event(EventType.EXECUTE));
+        Result result = menu.receiveEvent(new Event(EventType.SELECT));
         Assertions.assertFalse(result.hasError());
         // This assumes the result's success message is using the default message for this assertion to pass
         Assertions.assertNotEquals(Result.SUCCESS_MESSAGE, result.getMessage());
@@ -21,18 +21,18 @@ class TestMenu {
     @Test
     void testReceiveEvent_givenEventListenerThrowsException_thenResultHasError() {
         Menu menu = new Menu("test");
-        menu.addEventListener(EventType.EXECUTE, event -> {
+        menu.addEventListener(EventType.SELECT, event -> {
             throw new UnsupportedOperationException();
         });
-        Result result = menu.receiveEvent(new Event(EventType.EXECUTE));
+        Result result = menu.receiveEvent(new Event(EventType.SELECT));
         Assertions.assertTrue(result.hasError());
     }
 
     @Test
     void testReceiveEvent_givenEventListenerExists_thenResultHasNoError() {
         Menu menu = new Menu("test");
-        menu.addEventListener(EventType.EXECUTE, event -> {});
-        Result result = menu.receiveEvent(new Event(EventType.EXECUTE));
+        menu.addEventListener(EventType.SELECT, event -> {});
+        Result result = menu.receiveEvent(new Event(EventType.SELECT));
         Assertions.assertFalse(result.hasError());
     }
 
@@ -40,8 +40,8 @@ class TestMenu {
     void testReceiveEvent_givenEventListenerChangesOutsideScope_thenChangeOccurs() {
         AtomicBoolean executed = new AtomicBoolean(false);
         Menu menu = new Menu("test");
-        menu.addEventListener(EventType.EXECUTE, event -> executed.set(true));
-        Result result = menu.receiveEvent(new Event(EventType.EXECUTE));
+        menu.addEventListener(EventType.SELECT, event -> executed.set(true));
+        Result result = menu.receiveEvent(new Event(EventType.SELECT));
         Assertions.assertFalse(result.hasError());
         Assertions.assertTrue(executed.get());
     }
@@ -51,8 +51,8 @@ class TestMenu {
         Menu menu = new Menu("test");
         Menu child = new Menu("child");
         menu.addChild(child);
-        menu.addEventListener(EventType.EXECUTE, event -> Context.getInstance().push(child));
-        Result result = menu.receiveEvent(new Event(EventType.EXECUTE));
+        menu.addEventListener(EventType.SELECT, event -> Context.getInstance().push(child));
+        Result result = menu.receiveEvent(new Event(EventType.SELECT));
         Assertions.assertFalse(result.hasError());
         Assertions.assertEquals(child, Context.getInstance().peek());
     }

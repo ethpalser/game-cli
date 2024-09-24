@@ -51,7 +51,7 @@ class TestConsoleRunner {
         Assertions.assertTrue(eventOccurredSet.contains(EventType.PRE_RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.POST_RENDER));
-        Assertions.assertFalse(eventOccurredSet.contains(EventType.EXECUTE));
+        Assertions.assertFalse(eventOccurredSet.contains(EventType.SELECT));
     }
 
     @Test
@@ -71,7 +71,7 @@ class TestConsoleRunner {
         // The second read command is "1"
         canRun = runner.runCycle(reader, writer);
         Assertions.assertTrue(canRun);
-        Assertions.assertTrue(eventOccurredSet.contains(EventType.EXECUTE));
+        Assertions.assertTrue(eventOccurredSet.contains(EventType.SELECT));
 
         // Sanity checks
         Assertions.assertTrue(eventOccurredSet.contains(EventType.PRE_RENDER));
@@ -108,7 +108,7 @@ class TestConsoleRunner {
         Assertions.assertTrue(eventOccurredSet.contains(EventType.PRE_RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.POST_RENDER));
-        Assertions.assertTrue(eventOccurredSet.contains(EventType.EXECUTE));
+        Assertions.assertTrue(eventOccurredSet.contains(EventType.SELECT));
     }
 
     @Test
@@ -143,7 +143,7 @@ class TestConsoleRunner {
         Assertions.assertTrue(eventOccurredSet.contains(EventType.PRE_RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.POST_RENDER));
-        Assertions.assertTrue(eventOccurredSet.contains(EventType.EXECUTE));
+        Assertions.assertTrue(eventOccurredSet.contains(EventType.SELECT));
     }
 
     @Test
@@ -180,7 +180,7 @@ class TestConsoleRunner {
         Assertions.assertTrue(eventOccurredSet.contains(EventType.PRE_RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.RENDER));
         Assertions.assertTrue(eventOccurredSet.contains(EventType.POST_RENDER));
-        Assertions.assertTrue(eventOccurredSet.contains(EventType.EXECUTE));
+        Assertions.assertTrue(eventOccurredSet.contains(EventType.SELECT));
     }
 
     // endregion
@@ -197,7 +197,7 @@ class TestConsoleRunner {
         Assertions.assertFalse(eventOccurredSet.contains(EventType.PRE_RENDER));
         Assertions.assertFalse(eventOccurredSet.contains(EventType.RENDER));
         Assertions.assertFalse(eventOccurredSet.contains(EventType.POST_RENDER));
-        Assertions.assertFalse(eventOccurredSet.contains(EventType.EXECUTE));
+        Assertions.assertFalse(eventOccurredSet.contains(EventType.SELECT));
     }
 
 
@@ -213,8 +213,8 @@ class TestConsoleRunner {
     private MenuItem testAction() {
         // Test execute event from selecting a MenuItem
         MenuItem action = new MenuItem("other");
-        action.addEventListener(EventType.EXECUTE, event -> {
-            eventOccurredSet.add(EventType.EXECUTE);
+        action.addEventListener(EventType.SELECT, event -> {
+            eventOccurredSet.add(EventType.SELECT);
         });
         return action;
     }
@@ -222,8 +222,8 @@ class TestConsoleRunner {
     private MenuItem testSubmenu() {
         // Test updating context from selecting a MenuItem
         Menu submenu = new Menu("test");
-        submenu.addEventListener(EventType.EXECUTE, event -> {
-            eventOccurredSet.add(EventType.EXECUTE);
+        submenu.addEventListener(EventType.SELECT, event -> {
+            eventOccurredSet.add(EventType.SELECT);
             Context.getInstance().push(submenu);
         });
         return submenu;
