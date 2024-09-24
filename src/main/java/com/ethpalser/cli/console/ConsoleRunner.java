@@ -103,11 +103,28 @@ public class ConsoleRunner {
         String input = this.awaitInput(reader, visibleOptions);
         if (input == null || reader.getEscapeCommands().contains(input)) {
             writer.write("Closing the program, are you sure? (yes/no)");
-            String confirmation = this.awaitInput(reader, CONFIRM_OPTIONS);
-            return "n".equalsIgnoreCase(confirmation) || "no".equalsIgnoreCase(confirmation);
+            String confirm = this.awaitInput(reader, CONFIRM_OPTIONS);
+            boolean close = "y".equalsIgnoreCase(confirm) || "yes".equalsIgnoreCase(confirm);
+
+            if (close && this.context.peek().isSubmitOnLeave()) {
+                writer.write("Closing with changes, do you want to save your changes? (yes/no)");
+                String doubleConfirm = this.awaitInput(reader, CONFIRM_OPTIONS);
+                if ("y".equalsIgnoreCase(doubleConfirm) || "yes".equalsIgnoreCase(doubleConfirm)) {
+                    this.sendEvent(new Event(EventType.ON_CLOSE, null), this.context.peek());
+                }
+                return false;
+            }
+            return !close;
         }
 
         if (reader.getBackCommands().contains(input)) {
+            if (this.context.peek().isSubmitOnLeave()) {
+                writer.write("Leaving with changes, do you want to save your changes? (yes/no)");
+                String confirmation = this.awaitInput(reader, CONFIRM_OPTIONS);
+                if ("y".equalsIgnoreCase(confirmation) || "yes".equalsIgnoreCase(confirmation)) {
+                    this.sendEvent(new Event(EventType.ON_CLOSE, null), this.context.peek());
+                }
+            }
             this.context.pop();
         } else {
             // Split the input, as it may have arguments and would not match a menu option

@@ -5,5 +5,5 @@ public enum EventType {
     RENDER,
     POST_RENDER,
     SELECT,
-    SUBMIT;
+    ON_CLOSE;
 }

@@ -17,6 +17,7 @@ public class MenuItem {
     private String textDisplay; // alternate to display for screen readers, or primary display as string
     private boolean isDisabled;
     private boolean isHidden;
+    private boolean submitOnLeave;
 
     public MenuItem(final String name, final String altDisplayString) {
         this.name = name;
@@ -24,6 +25,7 @@ public class MenuItem {
         this.eventListeners = new EnumMap<>(EventType.class);
         this.isDisabled = false;
         this.isHidden = false;
+        this.submitOnLeave = false;
     }
 
     public MenuItem(final String name) {
@@ -73,6 +75,17 @@ public class MenuItem {
      */
     public void toggleHidden() {
         this.isHidden = !this.isHidden;
+    }
+
+    /**
+     * Determines if this should submit its state using its SUBMIT event handler (if it has one) before the context
+     * changes or exited. The default is false. It may be useful to enable this when a managed state can be
+     * saved and returned to, such as a game's state.
+     *
+     * @return boolean (true/false)
+     */
+    public boolean isSubmitOnLeave() {
+        return this.submitOnLeave;
     }
 
     /**
