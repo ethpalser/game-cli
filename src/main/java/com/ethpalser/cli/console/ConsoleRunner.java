@@ -36,14 +36,12 @@ public class ConsoleRunner {
         this.context.setDefault(main);
     }
 
-    private String awaitInput(ConsoleReader reader) {
+    private String awaitInput(ConsoleReader reader, List<String> options) {
         if (reader == null) {
             return null;
         }
         try {
-            List<String> visibleOptions = this.context.peek().getChildren().values()
-                    .stream().filter(child -> !child.isHidden()).map(MenuItem::getName).toList();
-            return reader.readOption(visibleOptions);
+            return reader.readOption(options);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,9 +93,15 @@ public class ConsoleRunner {
         this.sendEvent(new Event(EventType.RENDER), activeMenu);
         this.sendEvent(new Event(EventType.POST_RENDER), activeMenu);
 
-        String input = this.awaitInput(reader);
+        List<String> visibleOptions = this.context.peek().getChildren().values()
+                .stream().filter(child -> !child.isHidden())
+                .map(MenuItem::getName)
+                .toList();
+        String input = this.awaitInput(reader, visibleOptions);
         if (input == null || reader.getEscapeCommands().contains(input)) {
-            return false;
+            writer.write("Closing the program, are you sure? (yes/no)");
+            String confirmation = this.awaitInput(reader, List.of("y", "n", "yes", "no"));
+            return "n".equalsIgnoreCase(confirmation) || "no".equalsIgnoreCase(confirmation);
         }
 
         if (reader.getBackCommands().contains(input)) {
