@@ -98,7 +98,7 @@ public class ConsoleReader {
                 if (this.matchesReservedCommand(option.toLowerCase(Locale.ROOT))) {
                     return new Pair<>(parts.getFirst().toLowerCase(), parts.getLast());
                 }
-                return parts;
+                return new Pair<>(option, parts.getLast());
             }
             this.printErrorMessage(INPUT_INVALID_MESSAGE);
         } while (true);
