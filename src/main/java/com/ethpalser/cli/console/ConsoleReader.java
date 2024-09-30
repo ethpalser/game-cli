@@ -12,9 +12,9 @@ import java.util.Set;
 public class ConsoleReader {
 
     private static final String READER_PREFIX = "> ";
-    private static final String READER_CLOSED_ERROR_MESSAGE = "reader closed";
-    private static final String INPUT_INVALID_MESSAGE = "input invalid";
-    private static final String INPUT_NULL_MESSAGE = "input unexpected, received nothing";
+    private static final String READER_CLOSED_ERROR_MESSAGE = "reader closed\n";
+    private static final String INPUT_INVALID_MESSAGE = "input invalid\n";
+    private static final String INPUT_NULL_MESSAGE = "input unexpected\n";
 
     private final Set<String> escapeCommands;
     private final Set<String> backCommands;
@@ -77,7 +77,7 @@ public class ConsoleReader {
             String input = this.br.readLine();
             if (input == null) {
                 this.printErrorMessage(INPUT_NULL_MESSAGE);
-                return new Pair<>("exit", null);
+                return new Pair<>("exit -y", null); // force exit
             }
 
             Pair<String, String[]> parts = this.getParts(input);
